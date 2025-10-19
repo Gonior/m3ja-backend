@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv-flow'
-import * as dotenvExpand from 'dotenv-expand'
+import * as dotenv from 'dotenv-flow';
+import * as dotenvExpand from 'dotenv-expand';
 
 export const loadEnv = () => {
-  dotenvExpand.expand(dotenv.config())
-}
+  dotenvExpand.expand(dotenv.config());
+};

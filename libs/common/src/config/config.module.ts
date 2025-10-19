@@ -5,18 +5,18 @@ import appConfig from './app.config';
 import databaseConfig from './database.config';
 import loggerConfig from './logger.config';
 import secretConfig from './secret.config';
-import {loadEnv} from './env-loader'
+import { loadEnv } from './env-loader';
 
-loadEnv()
+loadEnv();
 @Module({
-  imports : [
+  imports: [
     NestConfigModule.forRoot({
-      isGlobal : true,
-      envFilePath : [`.env.${process.env.NODE_ENV || 'development'}`],
-      load : [appConfig, databaseConfig, loggerConfig, secretConfig],
-      validationSchema: configValidationSchema
-    })
+      isGlobal: true,
+      envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`],
+      load: [appConfig, databaseConfig, loggerConfig, secretConfig],
+      validationSchema: configValidationSchema,
+    }),
   ],
-  providers: []
+  providers: [],
 })
 export class ConfigModule {}

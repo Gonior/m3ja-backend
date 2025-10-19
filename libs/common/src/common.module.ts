@@ -6,11 +6,8 @@ import { LoggingInterceptor } from './inteceptors/logging.interceptor';
 import { ConfigModule } from './config/config.module';
 @Global()
 @Module({
-  imports : [
-    DbModule,
-    ConfigModule
-  ],
-  providers: [ AllExceptionFilter, LoggingInterceptor, AppLogger ],
+  imports: [DbModule, ConfigModule],
+  providers: [AllExceptionFilter, LoggingInterceptor, AppLogger],
   exports: [DbModule, AllExceptionFilter, LoggingInterceptor, AppLogger, ConfigModule],
 })
 export class CommonModule {}

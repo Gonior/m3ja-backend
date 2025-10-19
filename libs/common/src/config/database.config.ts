@@ -1,5 +1,5 @@
 export default () => ({
   database: {
-    url : process.env.DB_URL
-  }
-})
+    url: process.env.DB_URL,
+  },
+});

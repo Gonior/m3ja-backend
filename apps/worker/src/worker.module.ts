@@ -6,16 +6,16 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal : true,
-      ignoreEnvFile : true, 
-      load : [
+      isGlobal: true,
+      ignoreEnvFile: true,
+      load: [
         () => {
-          const dotenvflow = require('dotenv-flow')
-          dotenvflow.config()
-          return process.env
-        }
-      ]
-    })
+          const dotenvflow = require('dotenv-flow');
+          dotenvflow.config();
+          return process.env;
+        },
+      ],
+    }),
   ],
   controllers: [WorkerController],
   providers: [WorkerService],

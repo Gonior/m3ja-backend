@@ -1,6 +1,6 @@
 export interface IApiErrorDetail {
-  field?:string;
-  message : string;
+  field?: string;
+  message: string;
 }
 
 export interface IApiErrorResponse {

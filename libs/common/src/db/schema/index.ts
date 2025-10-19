@@ -1,1 +1,1 @@
-export {default as userTable} from './user.schema'
+export { default as userTable } from './user.schema';
