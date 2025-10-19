@@ -6,5 +6,6 @@ import { CreateUserDto } from './dto/create-user-dto';
 @Module({
   providers: [UsersService, CreateUserDto],
   controllers: [UsersController],
+  exports: [UsersService],
 })
 export class UsersModule {}

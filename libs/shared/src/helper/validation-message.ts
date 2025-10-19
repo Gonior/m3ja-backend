@@ -8,17 +8,17 @@ import {
 } from '../constant';
 import { ValidationArguments } from 'class-validator';
 
-export const minError = (field: string, prop: string | number) => {
-  return (args: ValidationArguments) => renderTemplate(ERROR_MESSSAGE_MIN_LENGTH, { field, prop });
+export const minErrorMessage = (field: string, prop: string | number) => {
+  return (_args: ValidationArguments) => renderTemplate(ERROR_MESSSAGE_MIN_LENGTH, { field, prop });
 };
-export const maxError = (field: string, prop: string | number) => {
-  return (args: ValidationArguments) => renderTemplate(ERROR_MESSAGE_MAX_LENGTH, { field, prop });
+export const maxErrorMessage = (field: string, prop: string | number) => {
+  return (_args: ValidationArguments) => renderTemplate(ERROR_MESSAGE_MAX_LENGTH, { field, prop });
 };
-export const isEmptyError = (field: string) => {
-  return (args: ValidationArguments) => renderTemplate(ERROR_MESSAGGE_IS_EMPTY, { field });
+export const isEmptyErrorMessage = (field: string) => {
+  return (_args: ValidationArguments) => renderTemplate(ERROR_MESSAGGE_IS_EMPTY, { field });
 };
 
-export const isAlreadyExists = (field: string) => {
+export const isAlreadyExistsMessage = (field: string) => {
   return renderTemplate(ERROR_MESSAGE_ALREADY_EXISTS, { field });
 };
-export const emailError = ERROR_MESSAGE_INVALID_EMAIL;
+export const emailErrorMessage = ERROR_MESSAGE_INVALID_EMAIL;

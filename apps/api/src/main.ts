@@ -43,7 +43,11 @@ async function bootstrap() {
   const host = config.get<string>('app.host') || '127.0.0.1';
   const port = config.get<number>('app.apiPort') || 3000;
 
-  await app.listen(port, host);
-  logger.log(`📡 server running on port http://${host}:${port}`);
+  try {
+    await app.listen(port, host);
+    logger.log(`📡 server running on port http://${host}:${port}`);
+  } catch (error) {
+    logger.error('❌ Failed to start server', (error as Error).stack);
+  }
 }
 bootstrap();

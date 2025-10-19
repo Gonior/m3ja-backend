@@ -1,6 +1,6 @@
 export default () => ({
   secret: {
     jwt: process.env.JWT_SECRET_KEY,
-    slat: Number(process.env.SALT) ?? 10,
+    salt: parseInt(process.env.SALT as string) ?? 10,
   },
 });

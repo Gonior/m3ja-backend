@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { WorkerController } from './worker.controller';
 import { WorkerService } from './worker.service';
 import { ConfigModule } from '@nestjs/config';
+import dotenvFlow from 'dotenv-flow';
 
 @Module({
   imports: [
@@ -10,8 +11,7 @@ import { ConfigModule } from '@nestjs/config';
       ignoreEnvFile: true,
       load: [
         () => {
-          const dotenvflow = require('dotenv-flow');
-          dotenvflow.config();
+          dotenvFlow.config();
           return process.env;
         },
       ],
