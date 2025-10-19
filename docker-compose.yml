@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: nest_api
+    env_file:
+      - .env
+      - .env.${NODE_ENV:-development}
+    command: npm run start:dev api
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "${API_PORT:-3000}:3000"
+    depends_on:
+      - db
+      - rabbitmq
+    restart: unless-stopped
+
+  worker:
+    build: .
+    container_name: nest_worker
+    command: npm run start:dev worker
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "${WORKER_PORT:-3001}:3001"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    env_file:
+      - .env
+      - .env.${NODE_ENV:-development}
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "${REDIS_PORT}:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "${RABBITMQ_PORT}:5672"    # AMQP
+      - "${RABBITMQ_GUI_PORT}:15672"  # UI dashboard
+
+volumes:
+  postgres_data:
