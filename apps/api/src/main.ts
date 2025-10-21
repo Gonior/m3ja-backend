@@ -3,11 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionFilter, AppLogger, LoggingInterceptor } from '@app/common';
-import { ApiError } from '@app/common/errors/api-error';
-import { ConfigService } from '@nestjs/config';
+import { ApiError, ConfigModule } from '@app/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { EnvService } from '@app/common/config/env.config.service';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
@@ -31,7 +31,7 @@ async function bootstrap() {
   console.log('Serving static on', join(process.cwd(), 'uploads'));
 
   // set env config
-  const config = app.get(ConfigService);
+  const config = app.get(EnvService);
 
   // set logger wiston
   const logger = new AppLogger();
@@ -70,8 +70,8 @@ async function bootstrap() {
   // global http logger
   app.useGlobalInterceptors(new LoggingInterceptor(new AppLogger()));
 
-  const host = config.get<string>('app.host') || '127.0.0.1';
-  const port = config.get<number>('app.apiPort') || 3000;
+  const host = config.appConfig.host || '127.0.0.1';
+  const port = config.appConfig.apiPort || 3000;
   try {
     await app.listen(port, host);
     logger.log(`📡 server running on port http://${host}:${port}`);

@@ -3,7 +3,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/api/src",
   "compilerOptions": {
-    "assets": [{ "include": "../../uploads/**/*", "outDir": "../../dist/uploads" }],
     "deleteOutDir": true,
     "webpack": true,
     "tsConfigPath": "apps/api/tsconfig.app.json"

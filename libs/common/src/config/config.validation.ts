@@ -6,7 +6,7 @@ export const configValidationSchema = Joi.object({
     .valid('development', 'staging', 'production', 'test')
     .default('development'),
   HOST: Joi.string().hostname().required(),
-  APP_PORT: Joi.number().default(3000),
+  API_PORT: Joi.number().default(3000),
   WORKER_PORT: Joi.number().default(3001),
 
   JWT_SECRET_KEY: Joi.string().min(8).required(),

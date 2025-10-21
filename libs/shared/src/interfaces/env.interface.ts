@@ -1,0 +1,24 @@
+export interface IEnv {
+  APP_NAME: string;
+  NODE_ENV: 'development' | 'production' | 'test';
+
+  HOST: string;
+  API_PORT: number;
+  WORKER_PORT: number;
+
+  JWT_SECRET_KEY: string;
+  SALT: number;
+
+  DB_URL: string;
+  REDIS_URL: string;
+  RABBITMQ_URL: string;
+
+  R2_ACCOUNT_ID: string;
+  R2_ACCESS_KEY_ID: string;
+  R2_SECRET_ACCESS_KEY: string;
+  R2_BUCKET_NAME: string;
+  R2_TOKEN_VALUE: string;
+  R2_ENDPOINT: string;
+  R2_PUBLIC_URL: string;
+  LOG_LEVELS: 'debug' | 'info' | 'warn' | 'error';
+}

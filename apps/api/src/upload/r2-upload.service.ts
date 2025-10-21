@@ -1,8 +1,8 @@
 import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
 import { Injectable } from '@nestjs/common';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { ConfigService } from '@nestjs/config';
 import { ApiError, AppLogger } from '@app/common';
+import { EnvService } from '@app/common/config/env.config.service';
 
 @Injectable()
 export class R2UploadService implements IUploadService {
@@ -11,18 +11,18 @@ export class R2UploadService implements IUploadService {
   private endpoint: string;
   constructor(
     private readonly logger: AppLogger,
-    private readonly config: ConfigService,
+    private readonly config: EnvService,
   ) {
     this.logger.setContext(R2UploadService.name);
-    this.bucket = config.get('r2.bucketName')!;
-    this.endpoint = config.get('r2.endpoint')!;
+    this.bucket = config.r2Config.bucketName!;
+    this.endpoint = config.r2Config.endpoint!;
 
     this.r2 = new S3Client({
       region: 'auto',
       endpoint: this.endpoint,
       credentials: {
-        accessKeyId: config.get('r2.accessKeyId')!,
-        secretAccessKey: config.get('r2.secretAccessKey')!,
+        accessKeyId: config.r2Config.accessKeyId!,
+        secretAccessKey: config.r2Config.secretAccessKey!,
       },
       forcePathStyle: false,
     });
@@ -43,7 +43,7 @@ export class R2UploadService implements IUploadService {
         }),
       );
 
-      const url = `https://${this.bucket}.${this.config.get('r2.accountId')}.r2.cloudflarestorage.com/${key}`;
+      const url = `https://${this.bucket}.${this.config.r2Config.accountId}.r2.cloudflarestorage.com/${key}`;
 
       this.logger.debug('finish to upload to r2');
       return {
