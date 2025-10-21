@@ -1,13 +1,43 @@
-import { Body, Controller, Inject, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Req,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-
 // import { memoryStorage } from 'multer';
 import { UploadConfigs } from './upload.config';
-import { FileValidationPipe } from '@app/common';
+import { ApiError, AppLogger, FileValidationPipe } from '@app/common';
 import { type IUploadService, UPLOAD_SERVICE } from '@app/shared';
+import type { Response, Request } from 'express';
+import { Readable } from 'stream';
+
 @Controller('upload')
 export class UploadController {
-  constructor(@Inject(UPLOAD_SERVICE) private readonly uploadService: IUploadService) {}
+  constructor(
+    @Inject(UPLOAD_SERVICE) private readonly uploadService: IUploadService,
+    private readonly logger: AppLogger,
+  ) {}
+
+  @Get('*path')
+  async getFile(@Param('path') path: string, @Res() res: Response) {
+    let key = path.replaceAll(',', '/');
+
+    let data = await this.uploadService.getFile(key);
+
+    if (!data) {
+      throw ApiError.NotFound();
+    }
+
+    res.setHeader('Content-Type', data.ContentType || 'pplication/octet-stream');
+    (data.Body as Readable).pipe(res);
+  }
 
   @Post('avatar')
   @UseInterceptors(FileInterceptor('file'))

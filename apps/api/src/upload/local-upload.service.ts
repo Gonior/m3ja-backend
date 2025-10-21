@@ -1,5 +1,6 @@
 import { ApiError, AppLogger } from '@app/common';
 import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
+import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { promises as fs } from 'fs';
@@ -12,6 +13,9 @@ export class LocalUploadService implements IUploadService {
     private readonly config: ConfigService,
   ) {
     this.logger.setContext('LocalUploadService');
+  }
+  getFile(key: string): Promise<GetObjectCommandOutput> {
+    throw new Error('Method not implemented.');
   }
   async deleteFile(key: string): Promise<void> {
     this.logger.debug(`⚠️ start to delete file ${key}`);

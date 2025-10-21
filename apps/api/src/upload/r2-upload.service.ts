@@ -1,6 +1,11 @@
 import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
 import { Injectable } from '@nestjs/common';
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { ApiError, AppLogger } from '@app/common';
 import { EnvService } from '@app/common/config/env.config.service';
 
@@ -26,6 +31,20 @@ export class R2UploadService implements IUploadService {
       },
       forcePathStyle: false,
     });
+  }
+
+  async getFile(key: string) {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.bucket,
+        Key: key,
+      });
+
+      return await this.r2.send(command);
+    } catch (error) {
+      this.logger.error(error);
+      throw ApiError.Internal();
+    }
   }
 
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
