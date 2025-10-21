@@ -3,9 +3,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { CreateUserDto } from './dto/create-user-dto';
 import { AppLogger, userTable } from '@app/common';
-import { isAlreadyExistsMessage } from '@app/shared/helper/validation-message';
-import { ApiError } from '@app/common';
 import { eq } from 'drizzle-orm';
+
 @Injectable()
 export class UsersService {
   constructor(

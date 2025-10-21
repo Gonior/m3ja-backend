@@ -7,6 +7,6 @@ export class AppController {
 
   @Get()
   async getHello(): Promise<string> {
-    return this.appService.getHello();
+    return await this.appService.getHello();
   }
 }
