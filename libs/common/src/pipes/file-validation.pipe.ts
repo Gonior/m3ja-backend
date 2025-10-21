@@ -1,9 +1,14 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
 import { ApiError } from '../errors/api-error';
-import { isEmptyErrorMessage, toLargeErrorMessage, typeFileNotAllowed } from '@app/shared';
+import {
+  type IFileValidationOptions,
+  isEmptyErrorMessage,
+  toLargeErrorMessage,
+  typeFileNotAllowed,
+} from '@app/shared';
 @Injectable()
-export class FilePipe implements PipeTransform {
-  constructor(private readonly options: { maxSize: number; allowedTypes: string[] }) {}
+export class FileValidationPipe implements PipeTransform {
+  constructor(private readonly options: IFileValidationOptions) {}
   transform(file: Express.Multer.File) {
     if (!file) throw ApiError.BadRequest(isEmptyErrorMessage({ field: 'file' }, true));
     if (file.size > this.options.maxSize)
@@ -12,7 +17,7 @@ export class FilePipe implements PipeTransform {
       );
 
     if (!this.options.allowedTypes.includes(file.mimetype))
-      throw ApiError.BadRequest(typeFileNotAllowed({ type: file.mimetype }));
+      throw ApiError.BadRequest(typeFileNotAllowed({ type: file.mimetype }, true));
 
     return file;
   }

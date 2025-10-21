@@ -6,11 +6,14 @@ import { AllExceptionFilter, AppLogger, LoggingInterceptor } from '@app/common';
 import { ApiError } from '@app/common/errors/api-error';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
   });
 
+  // konfigurasi swagger
   const configSwagger = new DocumentBuilder()
     .setTitle('m3ja-backend')
     .setDescription('Dokumentasi otomatis m3ja-backend API')
@@ -19,6 +22,14 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('docs', app, document);
+
+  // biar file lokal bisa diakses lewat url
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/static/',
+  });
+
+  console.log('Serving static on', join(process.cwd(), 'uploads'));
+
   // set env config
   const config = app.get(ConfigService);
 

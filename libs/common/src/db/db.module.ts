@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { DB_PROVIDER } from '@app/shared';
-import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { ConfigService } from '@nestjs/config';
+import postgres from 'postgres';
 
 @Module({
   providers: [

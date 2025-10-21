@@ -1,15 +1,3 @@
-export const DB_PROVIDER = 'DB_PROVIDER';
-export const WORKER_SERVICE = 'WORKER_SERVICE';
-
-export const MIN_LENGTH_PASSWORD = 8;
-export const MIN_LENGTH_DISPLAY_NAME = 1;
-
-export const MAX_LENGTH_DISPLAY_NAME = 100;
-export const MAX_LENGTH_EMAIL = 100;
-export const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024; // 2MB
-
-export const DEFAULT_ALLOWED_FILE_TYPE = ['image/jpeg', 'image/png', 'application/pdf'];
-
 export const ERROR_MESSSAGE_MIN_LENGTH = {
   en: '{{field}} must be at least {{value}} characters',
   id: '{{field}} minimal {{value}} karakter',

@@ -1,10 +1,13 @@
 export interface IUploadFileResponse {
-  filenmae: string;
+  originalName: string;
+  savedAs: string;
+  key: string; //object key yang dipake di cloudflare R2
   url: string;
   size: number;
-  mimiType: string;
+  mimeType: string;
 }
 
 export interface IUploadService {
-  savedFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse>;
+  saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse>;
+  deleteFile(key: string): Promise<void>;
 }

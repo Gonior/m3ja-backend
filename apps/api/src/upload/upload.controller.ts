@@ -1,35 +1,40 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Inject, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadService } from './upload.service';
-import { memoryStorage } from 'multer';
+
+// import { memoryStorage } from 'multer';
+import { UploadConfigs } from './upload.config';
 import { FileValidationPipe } from '@app/common';
-import { ALLOWED_FILE_TYPE, MAX_FILE_SIZE } from '@app/shared';
+import { type IUploadService, UPLOAD_SERVICE } from '@app/shared';
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(@Inject(UPLOAD_SERVICE) private readonly uploadService: IUploadService) {}
 
-  @Post()
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: memoryStorage(), // simpan di RAM -> tulis ke disk
-      limits: { fileSize: MAX_FILE_SIZE },
-    }),
-  )
-  async uploadFile(
+  @Post('avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAvatar(
     @UploadedFile(
+      // validasi jenis dan ukuran file
       new FileValidationPipe({
-        maxSize: MAX_FILE_SIZE,
-        allowedTypes: [...ALLOWED_FILE_TYPE],
+        maxSize: UploadConfigs.avatar.maxSize,
+        allowedTypes: UploadConfigs.avatar.allowedTypes,
       }),
     )
     file: Express.Multer.File,
-    @Body() userId: number,
   ) {
-    const result = await this.uploadService.saveFile(file);
-    return {
-      message: 'File berhasil diupload',
-      file: result,
-      userId,
-    };
+    return this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
+  }
+
+  @Post('document')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadDocument(
+    @UploadedFile(
+      new FileValidationPipe({
+        maxSize: UploadConfigs.document.maxSize,
+        allowedTypes: UploadConfigs.document.allowedTypes,
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.uploadService.saveFile(file, UploadConfigs.document.folder);
   }
 }

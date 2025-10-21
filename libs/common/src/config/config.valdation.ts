@@ -13,8 +13,16 @@ export const configValidationSchema = Joi.object({
   SALT: Joi.number().default(10),
 
   DB_URL: Joi.string().uri().required(),
-  REDIS_URL: Joi.string().uri(),
-  RABBITMQ_URL: Joi.string().uri(),
+  REDIS_URL: Joi.string().uri().required(),
+  RABBITMQ_URL: Joi.string().uri().required(),
+
+  R2_ACCOUNT_ID: Joi.string().required(),
+  R2_ACCESS_KEY_ID: Joi.string().required(),
+  R2_SECRET_ACCESS_KEY: Joi.string().required(),
+  R2_BUCKET_NAME: Joi.string().required(),
+  R2_TOKEN_VALUE: Joi.string().required(),
+  R2_ENDPOINT: Joi.string().uri().required(),
+  R2_PUBLIC_URL: Joi.string().uri().required(),
 
   LOG_LEVELS: Joi.string().valid('debug', 'info', 'warn', 'error').default('debug'),
 });

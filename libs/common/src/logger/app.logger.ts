@@ -10,7 +10,7 @@ export class AppLogger implements LoggerService {
     this.logger = createLogger({
       level: 'debug',
       format: format.combine(
-        format.colorize({ all: true }),
+        format.colorize(),
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         format.printf(({ timestamp, level, message }) => {
           return `${timestamp} [${level}] [${this.context}] ${message}`;
