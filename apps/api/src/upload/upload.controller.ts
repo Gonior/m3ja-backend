@@ -27,8 +27,9 @@ export class UploadController {
   ) {}
 
   @Get('*path')
-  async getFile(@Param('path') path: string, @Res() res: Response) {
-    let key = path.replaceAll(',', '/');
+  async getFile(@Param('path') path: string[], @Res() res: Response) {
+    console.log(path);
+    let key = path.join('/');
 
     let data = await this.uploadService.getFile(key);
 

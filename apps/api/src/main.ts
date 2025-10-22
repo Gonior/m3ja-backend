@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionFilter, AppLogger, LoggingInterceptor } from '@app/common';
-import { ApiError } from '@app/common/errors';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
@@ -36,33 +35,6 @@ async function bootstrap() {
   // set logger wiston
   const logger = new AppLogger();
   app.useLogger(logger);
-
-  // validasi global
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // auto hapus field yang tidak ada di DTO,
-      forbidNonWhitelisted: true, // error kalo ada field "liar"
-      transform: true, // auto transfrom data
-      exceptionFactory: (validationErrors) => {
-        const formatted = validationErrors.map((err) => ({
-          field: err.property,
-          message: Object.values(err.constraints ?? [])[0] ?? [],
-        }));
-        // format
-        // {
-        // ...,
-        //  errors : [
-        //    {
-        //      field: "password",
-        //      message:'password must be at least 8 characters';
-        //    }
-        //  ]
-        //...
-        //}
-        return ApiError.BadRequest('Validation failed', formatted);
-      },
-    }),
-  );
 
   // global error handler
   app.useGlobalFilters(new AllExceptionFilter(new AppLogger()));

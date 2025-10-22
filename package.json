@@ -12,7 +12,7 @@
     "db:migrate": "npx drizzle-kit migrate --config drizzle.config.ts",
     "devlog": "node scripts/create-devlog.js",
     "start": "nest start",
-    "start:dev": "NODE_ENV=production nest start --watch",
+    "start:dev": "NODE_ENV=development nest start --watch",
     "start:dev api": "NODE_ENV=development nest start api --watch",
     "start:dev worker": "NODE_ENV=development nest start worker --watch",
     "start:debug": "nest start --debug --watch",

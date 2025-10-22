@@ -1,42 +1,47 @@
 import { IApiErrorDetail, IApiErrorResponse } from '@app/shared';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { ErrorCode } from './error-code';
 
 export class ApiError extends HttpException {
   constructor(
-    message: string,
+    errorCode: ErrorCode,
     status: HttpStatus = HttpStatus.BAD_REQUEST,
-    errors?: IApiErrorDetail[],
+    params?: Record<string, any>,
+    details?: IApiErrorDetail[],
   ) {
-    const response: IApiErrorResponse = {
-      statusCode: status,
-      message,
-      errors: errors ?? null,
+    const response = {
+      errorCode,
+      params: params ?? null,
+      details: details ?? null,
     };
     super(response, status);
-    this.name = 'ApiError';
   }
 
-  static BadRequest(message: string, errors?: IApiErrorDetail[]) {
-    return new ApiError(message, HttpStatus.BAD_REQUEST, errors);
+  static BadRequest(
+    errorCode: ErrorCode,
+    params?: Record<string, any>,
+    details?: IApiErrorDetail[],
+  ) {
+    return new ApiError(errorCode, HttpStatus.BAD_REQUEST, params, details);
   }
 
-  static Unathorized(message = 'Forbidden') {
-    return new ApiError(message, HttpStatus.FORBIDDEN);
+  static NotFound(
+    errorCode: ErrorCode = 'NOT_FOUND',
+    params?: Record<string, any>,
+    details?: IApiErrorDetail[],
+  ) {
+    return new ApiError(errorCode, HttpStatus.NOT_FOUND, params, details);
   }
 
-  static NotFound(message = 'Not Found') {
-    return new ApiError(message, HttpStatus.NOT_FOUND);
+  static Unathorized(errorCode: ErrorCode = 'UNAUTHORIZED') {
+    return new ApiError(errorCode, HttpStatus.FORBIDDEN);
   }
 
-  static Conflict(message = 'Conflict') {
-    return new ApiError(message, HttpStatus.CONFLICT);
+  static Conflict(errorCode: ErrorCode) {
+    return new ApiError(errorCode, HttpStatus.CONFLICT);
   }
 
-  static Database(message = 'Database error') {
-    return new ApiError(message, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  static Internal(message = 'Internal server error') {
-    return new ApiError(message, HttpStatus.INTERNAL_SERVER_ERROR);
+  static Internal(errorCode: ErrorCode = 'INTERNAL_SERVER_ERROR') {
+    return new ApiError(errorCode, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

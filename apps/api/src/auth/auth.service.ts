@@ -21,8 +21,8 @@ export class AuthService {
   async login(authDto: AuthDto): Promise<TUser | undefined> {
     this.logger.log('start validating..');
     const user = await this.userService.findByEmail(authDto.email);
-    if (!user) throw ApiError.NotFound('email not found');
-    if (user?.password !== authDto.password) throw ApiError.Unathorized('credential is not valid');
+    if (!user) throw ApiError.Unathorized();
+    if (user?.password !== authDto.password) throw ApiError.Unathorized();
     //generate token
     this.createToken();
 
@@ -33,7 +33,7 @@ export class AuthService {
   async register(createUserDto: CreateUserDto) {
     this.logger.log('start call register()');
     const user = this.userService.createUser(createUserDto);
-    if (!user) throw ApiError.BadRequest('Can not register account');
+    if (!user) throw ApiError.BadRequest('REGISTER_ACCOUNT_ERROR');
     // generate token
     this.createToken();
     this.logger.log('register() is called');

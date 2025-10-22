@@ -7,3 +7,4 @@ export * from './filters/all-exception.filter';
 export * from './inteceptors/logging.interceptor';
 export * from './config/config.module';
 export * from './pipes/file-validation.pipe';
+export * from './pipes/base-validation.pipe';

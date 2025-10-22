@@ -76,7 +76,7 @@ export class R2UploadService implements IUploadService {
       };
     } catch (error) {
       this.logger.error(error);
-      throw ApiError.Internal('Failed to upload to r2');
+      throw ApiError.Internal('DATABASE_UPLOAD_ERROR');
     }
   }
 
@@ -91,7 +91,7 @@ export class R2UploadService implements IUploadService {
       this.logger.debug('finish to delete file from r2');
     } catch (error) {
       this.logger.error(error);
-      throw ApiError.Internal('R2 delete Failed');
+      throw ApiError.Internal('DATABASE_DELETE_ERROR');
     }
   }
 }
