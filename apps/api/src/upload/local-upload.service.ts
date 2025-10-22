@@ -1,4 +1,5 @@
-import { ApiError, AppLogger } from '@app/common';
+import { AppLogger } from '@app/common';
+import { ApiError } from '@app/common/errors';
 import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
 import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';

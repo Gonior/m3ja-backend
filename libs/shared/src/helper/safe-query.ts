@@ -1,5 +1,6 @@
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { isAlreadyExistsMessage } from './validation-message';
+import { ApiError } from '@app/common/errors';
 export async function safeQuery<T>(fn: () => Promise<T>, field = 'field') {
   try {
     return await fn();
@@ -8,10 +9,10 @@ export async function safeQuery<T>(fn: () => Promise<T>, field = 'field') {
     const code = error?.cause?.code;
     if (code === '23505') {
       // 23505 = duplicate key value violates unique constraint
-      throw new ConflictException(isAlreadyExistsMessage({ field }, true));
+      throw ApiError.Conflict(isAlreadyExistsMessage({ field }, true));
     }
 
-    throw new InternalServerErrorException('Database Error');
+    throw ApiError.Internal('Database Error');
   }
 }
 

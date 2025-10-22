@@ -4,13 +4,12 @@ import { AppLogger } from './logger/app.logger';
 import { AllExceptionFilter } from './filters/all-exception.filter';
 import { LoggingInterceptor } from './inteceptors/logging.interceptor';
 import { ConfigModule } from './config/config.module';
-import { ApiError } from './errors/api-error';
 import { LocaleService } from './locale/locale.service';
 
 @Global()
 @Module({
-  imports: [DbModule, ConfigModule, ApiError],
+  imports: [DbModule, ConfigModule],
   providers: [AllExceptionFilter, LoggingInterceptor, AppLogger, LocaleService],
-  exports: [DbModule, AllExceptionFilter, LoggingInterceptor, AppLogger, ConfigModule, ApiError],
+  exports: [DbModule, AllExceptionFilter, LoggingInterceptor, AppLogger, ConfigModule],
 })
 export class CommonModule {}

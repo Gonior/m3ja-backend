@@ -6,7 +6,8 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { ApiError, AppLogger } from '@app/common';
+import { AppLogger } from '@app/common';
+import { ApiError } from '@app/common/errors';
 import { EnvService } from '@app/common/config/env.config.service';
 
 @Injectable()

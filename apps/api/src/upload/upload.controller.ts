@@ -13,7 +13,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 // import { memoryStorage } from 'multer';
 import { UploadConfigs } from './upload.config';
-import { ApiError, AppLogger, FileValidationPipe } from '@app/common';
+import { AppLogger, FileValidationPipe } from '@app/common';
+import { ApiError } from '@app/common/errors';
 import { type IUploadService, UPLOAD_SERVICE } from '@app/shared';
 import type { Response, Request } from 'express';
 import { Readable } from 'stream';
