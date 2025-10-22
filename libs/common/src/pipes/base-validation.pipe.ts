@@ -15,7 +15,6 @@ export class BaseValidationPipe implements PipeTransform {
       transform: true, // auto transfrom data
     });
     if (errors.length > 0) {
-      console.log(errors);
       throw new BadRequestException(errors);
     }
 

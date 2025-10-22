@@ -31,7 +31,6 @@ export class AllExceptionFilter implements ExceptionFilter {
     };
 
     if (exception instanceof ApiError) {
-      console.log('thrown by ApiError');
       status = exception.getStatus();
       const res = exception.getResponse();
 
@@ -50,7 +49,6 @@ export class AllExceptionFilter implements ExceptionFilter {
         };
       }
     } else if (exception instanceof HttpException) {
-      console.log('thrown by HttpException');
       status = exception.getStatus();
       const res: any = exception.getResponse();
       body = {
@@ -61,7 +59,6 @@ export class AllExceptionFilter implements ExceptionFilter {
         details: typeof res === 'object' ? (formatErrors(res.message, lang) as any) : null,
       };
     } else if (exception instanceof Error) {
-      console.log('thrown by Error');
       body = {
         success: false,
         errorCode: 'INTERNAL_SERVER_ERROR',
