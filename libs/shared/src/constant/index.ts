@@ -1,2 +1,3 @@
 export * from './constant';
-export * from './template-string.constant';
+export * from './error-code';
+export * from './error-message';

@@ -1,6 +1,5 @@
-import { ErrorCode } from '@app/common/errors/error-code';
+import { ErrorCode, ERROR_MESSAGES, Lang } from '../constant';
 import { camelToScreamingSnake, interpolate } from './string.helper';
-import { ERROR_MESSAGES, Lang } from '@app/common/errors/error-message';
 
 export function translateValidationError(
   key: string | ErrorCode,

@@ -1,4 +1,4 @@
-import { ErrorCode } from '@app/common/errors/error-code';
+import { ErrorCode } from '../constant';
 
 export interface IApiErrorDetail {
   field?: string;

@@ -1,6 +1,6 @@
-import { IApiErrorDetail, IApiErrorResponse } from '@app/shared';
+import { IApiErrorDetail } from '@app/shared';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ErrorCode } from './error-code';
+import { ErrorCode } from '@app/shared';
 
 export class ApiError extends HttpException {
   constructor(
@@ -39,6 +39,10 @@ export class ApiError extends HttpException {
 
   static Conflict(errorCode: ErrorCode) {
     return new ApiError(errorCode, HttpStatus.CONFLICT);
+  }
+
+  static Forbidden(errorCode: ErrorCode = 'FORBIDDEN') {
+    return new ApiError(errorCode, HttpStatus.FORBIDDEN);
   }
 
   static Internal(errorCode: ErrorCode = 'INTERNAL_SERVER_ERROR') {

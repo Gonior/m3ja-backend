@@ -70,4 +70,8 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: 'Cannot register account',
     id: 'Tidak dapat membuat akun',
   },
+  FORBIDDEN: {
+    en: 'Forbidden access',
+    id: 'Akses tidak diizinkan',
+  },
 } as const;

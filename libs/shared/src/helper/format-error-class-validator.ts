@@ -1,6 +1,5 @@
-import { Lang } from '@app/common/errors/error-message';
+import { Lang, ErrorCode } from '../constant';
 import { translateValidationError } from './i18n.helper';
-import { ErrorCode } from '@app/common/errors/error-code';
 
 export function formatErrors(errors: any[], lang: Lang) {
   return errors.map((err) => {

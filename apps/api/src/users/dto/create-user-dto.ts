@@ -4,12 +4,6 @@ import {
   MIN_LENGTH_DISPLAY_NAME,
   MIN_LENGTH_PASSWORD,
 } from '@app/shared';
-import {
-  isEmptyErrorMessage,
-  maxErrorMessage,
-  minErrorMessage,
-  emailErrorMessage,
-} from '@app/shared/helper/validation-message';
 import { TUser } from '@app/shared';
 import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 export class CreateUserDto implements Omit<TUser, 'id' | 'createdAt' | 'updatedAt'> {
@@ -24,7 +18,7 @@ export class CreateUserDto implements Omit<TUser, 'id' | 'createdAt' | 'updatedA
   email: string;
 
   @MinLength(MIN_LENGTH_PASSWORD, { context: { min: MIN_LENGTH_PASSWORD } })
-  @IsNotEmpty({ message: isEmptyErrorMessage({ field: 'password' }) })
+  @IsNotEmpty()
   password: string;
 
   @IsOptional()

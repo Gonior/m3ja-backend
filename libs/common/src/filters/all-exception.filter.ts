@@ -9,8 +9,8 @@ import {
 } from '@app/shared';
 import 'dotenv-flow/config';
 import { ApiError } from '../errors';
-import { Lang } from '../errors/error-message';
-import { ErrorCode } from '../errors/error-code';
+import { Lang, ErrorCode } from '@app/shared';
+
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: AppLogger) {

@@ -1,6 +1,6 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
 import { ApiError } from '../errors/api-error';
-import { type IFileValidationOptions, toLargeErrorMessage, typeFileNotAllowed } from '@app/shared';
+import { type IFileValidationOptions } from '@app/shared';
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
   constructor(private readonly options: IFileValidationOptions) {}
