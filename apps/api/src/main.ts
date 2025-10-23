@@ -6,11 +6,20 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { EnvService } from '@app/common/config/env.config.service';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
   });
 
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'api_queue',
+      queueOptions: { durable: true },
+    },
+  });
   // konfigurasi swagger
   const configSwagger = new DocumentBuilder()
     .setTitle('m3ja-backend')
@@ -23,10 +32,8 @@ async function bootstrap() {
 
   // biar file lokal bisa diakses lewat url
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
-    prefix: '/static/',
+    prefix: '/file/',
   });
-
-  console.log('Serving static on', join(process.cwd(), 'uploads'));
 
   // set env config
   const config = app.get(EnvService);
@@ -44,7 +51,9 @@ async function bootstrap() {
   const host = config.appConfig.host || '127.0.0.1';
   const port = config.appConfig.apiPort || 3000;
   try {
+    await app.startAllMicroservices();
     await app.listen(port, host);
+
     logger.log(`📡 server running on port http://${host}:${port}`);
     logger.log(`📖 swagger running on port http://${host}:${port}/docs`);
   } catch (error) {

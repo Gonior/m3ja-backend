@@ -1,43 +1,30 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Param,
-  Post,
-  Req,
-  Res,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { AppLogger, FileValidationPipe, UploadConfigs, UploadType } from '@app/common';
-import { ApiError } from '@app/common/errors';
-import { type IUploadService, UPLOAD_SERVICE } from '@app/shared';
+import { Controller, Get, Param, Post, Res, UploadedFile } from '@nestjs/common';
+import { AppLogger, UploadConfigs, UploadType } from '@app/common';
 import type { Response } from 'express';
 import { Readable } from 'stream';
+import { UploadBridgeService } from './upload-bridge.service';
 
 @Controller('upload')
 export class UploadController {
   constructor(
-    @Inject(UPLOAD_SERVICE) private readonly uploadService: IUploadService,
+    private readonly uploadService: UploadBridgeService,
     private readonly logger: AppLogger,
   ) {}
 
-  @Get('*path')
-  async getFile(@Param('path') path: string[], @Res() res: Response) {
-    console.log(path);
-    let key = path.join('/');
+  // @Get('*path')
+  // async getFile(@Param('path') path: string[], @Res() res: Response) {
 
-    let data = await this.uploadService.getFile(key);
+  //   let key = path.join('/');
 
-    if (!data) {
-      throw ApiError.NotFound();
-    }
+  //   let data = await this.uploadService.getFile(key);
 
-    res.setHeader('Content-Type', data.ContentType || 'pplication/octet-stream');
-    (data.Body as Readable).pipe(res);
-  }
+  //   if (!data) {
+  //     throw ApiError.NotFound();
+  //   }
+
+  //   res.setHeader('Content-Type', data.ContentType || 'pplication/octet-stream');
+  //   (data.Body as Readable).pipe(res);
+  // }
 
   @Post('avatar')
   @UploadType({ type: 'avatar' })
@@ -51,7 +38,7 @@ export class UploadController {
   }
 
   @Post('document')
-  @UploadType({ type: 'document', optional: true })
+  @UploadType({ type: 'document' })
   async uploadDocument(
     @UploadedFile()
     file: Express.Multer.File,

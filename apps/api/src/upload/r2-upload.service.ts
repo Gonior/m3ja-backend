@@ -1,4 +1,9 @@
-import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
+import {
+  generateFilename,
+  IDeletedFileResponse,
+  IUploadFileResponse,
+  IUploadService,
+} from '@app/shared';
 import { Injectable } from '@nestjs/common';
 import {
   DeleteObjectCommand,
@@ -9,6 +14,7 @@ import {
 import { AppLogger } from '@app/common';
 import { ApiError } from '@app/common/errors';
 import { EnvService } from '@app/common/config/env.config.service';
+import { Readable } from 'stream';
 
 @Injectable()
 export class R2UploadService implements IUploadService {
@@ -51,14 +57,14 @@ export class R2UploadService implements IUploadService {
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
     try {
       this.logger.debug('start to upload to r2');
+      const stream = Readable.from(file.buffer);
       const filename = generateFilename(file);
       const key = `${folder.replace(/\/$/, '')}/${filename}`;
-      this.logger.debug(key);
       await this.r2.send(
         new PutObjectCommand({
           Bucket: this.bucket,
           Key: key,
-          Body: file.buffer,
+          Body: stream,
           ContentType: file.mimetype,
         }),
       );
@@ -80,7 +86,7 @@ export class R2UploadService implements IUploadService {
     }
   }
 
-  async deleteFile(key: string): Promise<void> {
+  async deleteFile(key: string): Promise<IDeletedFileResponse> {
     try {
       await this.r2.send(
         new DeleteObjectCommand({
@@ -89,6 +95,10 @@ export class R2UploadService implements IUploadService {
         }),
       );
       this.logger.debug('finish to delete file from r2');
+      return {
+        success: true,
+        message: 'File deleted!',
+      };
     } catch (error) {
       this.logger.error(error);
       throw ApiError.Internal('DATABASE_DELETE_ERROR');

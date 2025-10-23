@@ -5,7 +5,6 @@ import { AllExceptionFilter } from './filters/all-exception.filter';
 import { LoggingInterceptor } from './inteceptors/logging.interceptor';
 import { ConfigModule } from './config/config.module';
 import { LocaleService } from './locale/locale.service';
-import { UploadType } from './decorators/upload-type.decorator';
 
 @Global()
 @Module({

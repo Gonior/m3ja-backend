@@ -1,25 +1,21 @@
-import { CommonModule } from '@app/common';
+import { WORKER_SERVICE, WORKER_UPLOAD_AVATAR } from '@app/shared';
 import { Module } from '@nestjs/common';
-import { WorkerService } from './worker.service';
-import { WorkerController } from './worker.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
-    CommonModule,
     ClientsModule.register([
       {
-        name: 'API_SERVICE',
+        name: WORKER_SERVICE,
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://localhost:5672'],
-          queue: 'api_queue',
+          queue: 'upload_queue',
           queueOptions: { durable: true },
         },
       },
     ]),
   ],
-  controllers: [WorkerController],
-  providers: [WorkerService, ClientsModule],
+  exports: [ClientsModule],
 })
-export class WorkerModule {}
+export class RabbitMqModule {}

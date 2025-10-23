@@ -28,5 +28,5 @@ export class UpdateUserDto implements Partial<CreateUserDto> {
 
   @IsOptional()
   @IsOptional()
-  profilePictureUrl?: string | null;
+  avatarKey?: string | null;
 }

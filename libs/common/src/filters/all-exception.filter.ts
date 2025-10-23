@@ -10,7 +10,6 @@ import {
 import 'dotenv-flow/config';
 import { ApiError } from '../errors';
 import { Lang, ErrorCode } from '@app/shared';
-import { error } from 'console';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {

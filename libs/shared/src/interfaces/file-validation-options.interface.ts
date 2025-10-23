@@ -22,6 +22,5 @@ export interface IUploadConfigs {
 export interface IUploadTypeOptions {
   type: keyof typeof UploadConfigs;
   dest?: string;
-  optional?: boolean;
   custom?: Partial<MulterOptions>;
 }

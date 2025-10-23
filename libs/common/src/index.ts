@@ -9,3 +9,4 @@ export * from './config/config.module';
 export * from './pipes/file-validation.pipe';
 export * from './pipes/base-validation.pipe';
 export * from './decorators/upload-type.decorator';
+export * from './decorators/json-body.decorator';

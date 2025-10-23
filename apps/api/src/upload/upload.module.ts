@@ -1,18 +1,12 @@
 import { Module } from '@nestjs/common';
+import { UploadController } from './upload.controller';
+import { UploadBridgeService } from './upload-bridge.service';
 import { LocalUploadService } from './local-upload.service';
 import { R2UploadService } from './r2-upload.service';
-import { UploadController } from './upload.controller';
-
-import { UPLOAD_SERVICE } from '@app/shared';
 
 @Module({
-  providers: [
-    {
-      provide: UPLOAD_SERVICE,
-      useClass: process.env.NODE_ENV === 'production' ? R2UploadService : LocalUploadService,
-    },
-  ],
+  providers: [UploadBridgeService, LocalUploadService, R2UploadService],
   controllers: [UploadController],
-  exports: [UPLOAD_SERVICE],
+  exports: [UploadBridgeService],
 })
 export class UploadModule {}

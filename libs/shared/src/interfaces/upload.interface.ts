@@ -9,8 +9,11 @@ export interface IUploadFileResponse {
   mimeType: string;
 }
 
+export interface IDeletedFileResponse {
+  success: boolean;
+  message: string;
+}
 export interface IUploadService {
-  getFile(key: string): Promise<GetObjectCommandOutput>;
   saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse>;
-  deleteFile(key: string): Promise<void>;
+  deleteFile(key: string): Promise<IDeletedFileResponse>;
 }

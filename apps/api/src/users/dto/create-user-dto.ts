@@ -22,5 +22,5 @@ export class CreateUserDto implements Omit<TUser, 'id' | 'createdAt' | 'updatedA
   password: string;
 
   @IsOptional()
-  profilePictureUrl: string | null;
+  avatarKey: string | null;
 }
