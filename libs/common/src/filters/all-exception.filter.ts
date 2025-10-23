@@ -10,6 +10,7 @@ import {
 import 'dotenv-flow/config';
 import { ApiError } from '../errors';
 import { Lang, ErrorCode } from '@app/shared';
+import { error } from 'console';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -31,6 +32,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     };
 
     if (exception instanceof ApiError) {
+      console.log('thrown by apierror');
       status = exception.getStatus();
       const res = exception.getResponse();
 
@@ -49,15 +51,46 @@ export class AllExceptionFilter implements ExceptionFilter {
         };
       }
     } else if (exception instanceof HttpException) {
+      console.log('thrown by httpexception');
       status = exception.getStatus();
       const res: any = exception.getResponse();
-      body = {
-        success: false,
-        errorCode: 'VALIDATE_ERROR',
-        statusCode: status,
-        message: translateValidationError('VALIDATE_ERROR', lang),
-        details: typeof res === 'object' ? (formatErrors(res.message, lang) as any) : null,
-      };
+      if (status === 400) {
+        // get error from class-validator
+        body = {
+          success: false,
+          errorCode: 'VALIDATE_ERROR',
+          statusCode: status,
+          message: translateValidationError('VALIDATE_ERROR', lang),
+          details:
+            typeof res?.message === 'object'
+              ? (formatErrors(res.message, lang) as any)
+              : res.message,
+        };
+      } else if (status === 413) {
+        // get error from multer middleware
+        const maxSize = request['multerMaxSize'] / 1024 / 1024;
+        body = {
+          success: false,
+          errorCode: 'FILE_TOO_LARGE',
+          statusCode: status,
+          message: translateValidationError('FILE_TOO_LARGE', lang, {
+            max: isNaN(maxSize) ? 'max' : maxSize,
+          }),
+          details:
+            typeof res?.message === 'object'
+              ? (formatErrors(res.message, lang) as any)
+              : res.message,
+        };
+      } else {
+        // get error from unregitered error
+        body = {
+          success: false,
+          errorCode: 'UNREGISTERED_ERROR',
+          statusCode: status,
+          message: translateValidationError('UNREGISTERED_ERROR', lang),
+          details: res.message ?? null,
+        };
+      }
     } else if (exception instanceof Error) {
       body = {
         success: false,

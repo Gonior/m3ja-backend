@@ -1,7 +1,6 @@
 import 'dotenv-flow/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionFilter, AppLogger, LoggingInterceptor } from '@app/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';

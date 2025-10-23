@@ -1,15 +1,16 @@
 import {
   IUploadConfigs,
-  MAX_FILE_AVATAR_SIZE,
+  MAX_AVATAR_SIZE,
   MAX_FILE_SIZE,
   ALLOWED_FILE_TYPE,
-  ALLOWED_FILE_AVATAR_TYPE,
+  ALLOWED_AVATAR_TYPE,
 } from '@app/shared';
+
 export const UploadConfigs: IUploadConfigs = {
   avatar: {
     folder: 'avatars',
-    maxSize: MAX_FILE_AVATAR_SIZE,
-    allowedTypes: ALLOWED_FILE_AVATAR_TYPE,
+    maxSize: MAX_AVATAR_SIZE,
+    allowedTypes: ALLOWED_AVATAR_TYPE,
   },
   document: {
     folder: 'documents',

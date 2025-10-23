@@ -26,7 +26,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: '{{field}} already exists',
     id: '{{field}} sudah terdaftar',
   },
-  FILE_TO_LARGE: {
+  FILE_TOO_LARGE: {
     en: 'The file is too large. Maximum {{max}}MB',
     id: 'Ukuran file terlalu besar, maksimum {{max}}MB ',
   },
@@ -73,5 +73,9 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
   FORBIDDEN: {
     en: 'Forbidden access',
     id: 'Akses tidak diizinkan',
+  },
+  UNREGISTERED_ERROR: {
+    en: 'Error not registered, see the console for more details',
+    id: 'Error tidak terdaftar, lihat console untuk melihat detailnya',
   },
 } as const;

@@ -1,10 +1,11 @@
 export * from './common.module';
 export * from './db/db.module';
 export * from './db/schema';
-
+export * from './config/upload.config';
 export * from './logger/app.logger';
 export * from './filters/all-exception.filter';
 export * from './inteceptors/logging.interceptor';
 export * from './config/config.module';
 export * from './pipes/file-validation.pipe';
 export * from './pipes/base-validation.pipe';
+export * from './decorators/upload-type.decorator';

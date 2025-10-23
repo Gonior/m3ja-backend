@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@app/common';
 import { UploadModule } from './upload/upload.module';
 import { APP_PIPE } from '@nestjs/core';
+import { MulterMaxSizeMiddleware } from '@app/common/middleware/multer-maxsize.middleware';
 
 @Module({
   imports: [UsersModule, CommonModule, AuthModule, ConfigModule, UploadModule],
@@ -19,4 +20,8 @@ import { APP_PIPE } from '@nestjs/core';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(MulterMaxSizeMiddleware).forRoutes('upload');
+  }
+}

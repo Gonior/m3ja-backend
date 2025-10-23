@@ -11,12 +11,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { memoryStorage } from 'multer';
-import { UploadConfigs } from './upload.config';
-import { AppLogger, FileValidationPipe } from '@app/common';
+import { AppLogger, FileValidationPipe, UploadConfigs, UploadType } from '@app/common';
 import { ApiError } from '@app/common/errors';
 import { type IUploadService, UPLOAD_SERVICE } from '@app/shared';
-import type { Response, Request } from 'express';
+import type { Response } from 'express';
 import { Readable } from 'stream';
 
 @Controller('upload')
@@ -42,31 +40,23 @@ export class UploadController {
   }
 
   @Post('avatar')
-  @UseInterceptors(FileInterceptor('file'))
+  @UploadType({ type: 'avatar' })
   async uploadAvatar(
-    @UploadedFile(
-      // validasi jenis dan ukuran file
-      new FileValidationPipe({
-        maxSize: UploadConfigs.avatar.maxSize,
-        allowedTypes: UploadConfigs.avatar.allowedTypes,
-      }),
-    )
+    @UploadedFile()
     file: Express.Multer.File,
   ) {
-    return this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
+    if (file) return this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
+
+    return 'kamu testing aja ya?';
   }
 
   @Post('document')
-  @UseInterceptors(FileInterceptor('file'))
+  @UploadType({ type: 'document', optional: true })
   async uploadDocument(
-    @UploadedFile(
-      new FileValidationPipe({
-        maxSize: UploadConfigs.document.maxSize,
-        allowedTypes: UploadConfigs.document.allowedTypes,
-      }),
-    )
+    @UploadedFile()
     file: Express.Multer.File,
   ) {
-    return this.uploadService.saveFile(file, UploadConfigs.document.folder);
+    if (file) return this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
+    return 'testing?';
   }
 }
