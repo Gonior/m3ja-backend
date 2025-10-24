@@ -43,8 +43,8 @@
     "@nestjs/websockets": "^11.1.7",
     "@socket.io/redis-adapter": "^8.3.0",
     "amqplib": "^0.10.9",
+    "argon2": "^0.44.0",
     "axios": "^1.12.2",
-    "bcrypt": "^6.0.0",
     "cache-manager": "^7.2.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
@@ -74,7 +74,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
-    "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
     "@types/bcrypt": "^6.0.0",
@@ -97,7 +96,6 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
