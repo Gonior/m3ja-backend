@@ -1,4 +1,5 @@
 export * from './error.interface';
-export * from './upload.interface';
+export * from './upload-service.interface';
 export * from './file-validation-options.interface';
 export * from './env.interface';
+export * from './file-service.interface';

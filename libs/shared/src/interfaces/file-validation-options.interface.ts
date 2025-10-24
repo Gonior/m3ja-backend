@@ -2,6 +2,7 @@ import { UploadConfigs } from '@app/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 export interface IFileValidationOptions {
+  type: keyof typeof UploadConfigs;
   maxSize: number;
   allowedTypes: string[];
   optional?: boolean;
@@ -21,6 +22,5 @@ export interface IUploadConfigs {
 
 export interface IUploadTypeOptions {
   type: keyof typeof UploadConfigs;
-  dest?: string;
   custom?: Partial<MulterOptions>;
 }

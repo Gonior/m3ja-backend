@@ -10,6 +10,9 @@ import { APP_PIPE } from '@nestjs/core';
 import { MulterMaxSizeMiddleware } from '@app/common/middleware/multer-maxsize.middleware';
 import { RegistrationModule } from './registration/registration.module';
 import { RabbitMqModule } from './rabbit-mq/rabbit-mq.module';
+import { FileModule } from './file/file.module';
+import { FileModule as FileModuleCore } from '@app/file';
+import { UploadModule as UploadModuleCore } from '@app/upload';
 
 @Module({
   imports: [
@@ -17,9 +20,12 @@ import { RabbitMqModule } from './rabbit-mq/rabbit-mq.module';
     CommonModule,
     AuthModule,
     ConfigModule,
-    UploadModule,
     RegistrationModule,
     RabbitMqModule,
+    UploadModule,
+    UploadModuleCore,
+    FileModule,
+    FileModuleCore,
   ],
   controllers: [AppController],
   providers: [

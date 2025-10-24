@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UploadController } from './upload.controller';
-import { UploadBridgeService } from './upload-bridge.service';
-import { LocalUploadService } from './local-upload.service';
-import { R2UploadService } from './r2-upload.service';
-
+import { UploadModule as UploadModuleCore } from '@app/upload';
 @Module({
-  providers: [UploadBridgeService, LocalUploadService, R2UploadService],
+  providers: [UploadModuleCore],
   controllers: [UploadController],
-  exports: [UploadBridgeService],
 })
 export class UploadModule {}

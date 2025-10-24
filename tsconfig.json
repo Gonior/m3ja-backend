@@ -27,11 +27,23 @@
       "@app/common/*": [
         "libs/common/src/*"
       ],
+      "@app/file": [
+        "libs/file/src"
+      ],
+      "@app/file/*": [
+        "libs/file/src/*"
+      ],
       "@app/shared": [
         "libs/shared/src"
       ],
       "@app/shared/*": [
         "libs/shared/src/*"
+      ],
+      "@app/upload": [
+        "libs/upload/src"
+      ],
+      "@app/upload/*": [
+        "libs/upload/src/*"
       ]
     },
     "baseUrl": "./"

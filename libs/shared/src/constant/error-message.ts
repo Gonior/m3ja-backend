@@ -78,4 +78,16 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: 'Error not registered, see the console for more details',
     id: 'Error tidak terdaftar, lihat console untuk melihat detailnya',
   },
+  CAN_NOT_READ_DIMENSION: {
+    en: 'Can not read image dimension',
+    id: 'Tidak dapat membaca dimensi gambar',
+  },
+  INVALID_RASIO_AVATAR: {
+    en: 'Image must have a rasio 1:1',
+    id: 'Gambar harus mempunyai rasio 1:1',
+  },
+  UNREADABLE_FILE: {
+    en: 'Invalid image format or unreadable file',
+    id: 'Format image salah atau tidak dapa membaca file',
+  },
 } as const;

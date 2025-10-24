@@ -31,9 +31,9 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   // biar file lokal bisa diakses lewat url
-  app.useStaticAssets(join(process.cwd(), 'uploads'), {
-    prefix: '/file/',
-  });
+  // app.useStaticAssets(join(process.cwd(), 'uploads'), {
+  //   prefix: '/file/',
+  // });
 
   // set env config
   const config = app.get(EnvService);

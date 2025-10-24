@@ -11,12 +11,12 @@ export const MAX_LENGTH_EMAIL = 100;
 export const MAX_AVATAR_SIZE = 1 * 1024 * 1024; // 1MB
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-export const ALLOWED_AVATAR_TYPE = ['image/jpeg', 'image/png', 'image/jpg'];
+export const ALLOWED_AVATAR_TYPE = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
 export const ALLOWED_FILE_TYPE = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
+  ...ALLOWED_AVATAR_TYPE,
   'application/pdf',
   'application/msword',
+  'application/msexcel',
+  'application/mspowerpoint',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ];

@@ -1,0 +1,27 @@
+import { AppLogger } from '@app/common';
+import { ApiError } from '@app/common/errors';
+import { IFileService } from '@app/shared';
+import { Injectable } from '@nestjs/common';
+import { createReadStream, existsSync } from 'fs';
+import { lookup } from 'mime-types';
+import { join } from 'path';
+
+@Injectable()
+export class LocalFileService implements IFileService {
+  constructor(private readonly logger: AppLogger) {
+    this.logger.setContext(LocalFileService.name);
+  }
+  async getFile(folder: string, filename: string) {
+    this.logger.debug('start get local file...');
+    const filePath = join(process.cwd(), 'uploads', folder, filename);
+    if (!existsSync(filePath)) {
+      this.logger.error('file not found');
+      throw ApiError.NotFound('NOT_FOUND', { prop: 'File' });
+    }
+
+    const stream = createReadStream(filePath) as NodeJS.ReadableStream;
+    const contentType = lookup(filePath) || 'application/octet-stream';
+    this.logger.debug('finish get local file...');
+    return { stream, contentType };
+  }
+}

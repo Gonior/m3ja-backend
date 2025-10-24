@@ -5,12 +5,7 @@ import {
   IUploadService,
 } from '@app/shared';
 import { Injectable } from '@nestjs/common';
-import {
-  DeleteObjectCommand,
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { AppLogger } from '@app/common';
 import { ApiError } from '@app/common/errors';
 import { EnvService } from '@app/common/config/env.config.service';
@@ -40,43 +35,29 @@ export class R2UploadService implements IUploadService {
     });
   }
 
-  async getFile(key: string) {
-    try {
-      const command = new GetObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-      });
-
-      return await this.r2.send(command);
-    } catch (error) {
-      this.logger.error(error);
-      throw ApiError.Internal();
-    }
-  }
-
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
     try {
       this.logger.debug('start to upload to r2');
       const stream = Readable.from(file.buffer);
+      console.log({ stream });
       const filename = generateFilename(file);
       const key = `${folder.replace(/\/$/, '')}/${filename}`;
+
       await this.r2.send(
         new PutObjectCommand({
           Bucket: this.bucket,
           Key: key,
           Body: stream,
           ContentType: file.mimetype,
+          ContentLength: file.size,
         }),
       );
-
-      const url = `https://${this.bucket}.${this.config.r2Config.accountId}.r2.cloudflarestorage.com/${key}`;
 
       this.logger.debug('finish to upload to r2');
       return {
         originalName: file.originalname,
         savedAs: filename,
         key,
-        url,
         size: file.size,
         mimeType: file.mimetype,
       };

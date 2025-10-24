@@ -80,6 +80,15 @@ export class AllExceptionFilter implements ExceptionFilter {
               ? (formatErrors(res.message, lang) as any)
               : res.message,
         };
+      } else if (status === 404) {
+        // get error from not Found
+        body = {
+          success: false,
+          errorCode: 'NOT_FOUND',
+          statusCode: status,
+          message: res.message ?? null,
+          details: null,
+        };
       } else {
         // get error from unregitered error
         body = {

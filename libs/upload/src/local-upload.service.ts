@@ -57,7 +57,6 @@ export class LocalUploadService implements IUploadService {
       originalName: file.originalname,
       savedAs: filename,
       key: `${folder}/${filename}`,
-      url: `http://${this.config.appConfig.host}:${this.config.appConfig.apiPort}/file/${folder}/${filename}`, // serve via web static
       size: file.size,
       mimeType: file.mimetype,
     };
