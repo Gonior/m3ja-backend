@@ -1,4 +1,4 @@
-import { WORKER_UPLOAD_AVATAR } from '@app/shared';
+import {} from '@app/shared';
 import { Injectable } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 
@@ -6,9 +6,9 @@ import { EventPattern, Payload } from '@nestjs/microservices';
 export class WorkerService {
   constructor() {}
 
-  @EventPattern(WORKER_UPLOAD_AVATAR)
-  async handleUpload(@Payload() data: any) {
-    console.log('from worker service');
-    console.log(data);
-  }
+  // @EventPattern(WORKER_UPLOAD_AVATAR)
+  // async handleUpload(@Payload() data: any) {
+  //   console.log('from worker service');
+  //   console.log(data);
+  // }
 }

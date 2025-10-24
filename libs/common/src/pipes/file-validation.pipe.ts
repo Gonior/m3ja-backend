@@ -23,7 +23,6 @@ export class FileValidationPipe implements PipeTransform {
         });
       if (!meta.width || !meta.height) throw ApiError.BadRequest('CAN_NOT_READ_DIMENSION');
       const ratio = meta.width / meta.height;
-      console.log(ratio);
       // toleransi 5%
       if (ratio > 1.05 || ratio < 0.95) throw ApiError.BadRequest('INVALID_RASIO_AVATAR');
     }

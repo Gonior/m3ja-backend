@@ -29,12 +29,12 @@ export class R2FileService implements IFileService {
       forcePathStyle: false,
     });
   }
-  async getFile(folder: string, filename: string) {
+  async getFile(key: string) {
     try {
       this.logger.debug('start get file from r2');
       const command = new GetObjectCommand({
         Bucket: this.bucket,
-        Key: `${folder}/${filename}`,
+        Key: key,
       });
       const res = await this.r2.send(command);
       const stream = res.Body as NodeJS.ReadableStream;

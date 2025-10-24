@@ -11,9 +11,9 @@ export class LocalFileService implements IFileService {
   constructor(private readonly logger: AppLogger) {
     this.logger.setContext(LocalFileService.name);
   }
-  async getFile(folder: string, filename: string) {
+  async getFile(key: string) {
     this.logger.debug('start get local file...');
-    const filePath = join(process.cwd(), 'uploads', folder, filename);
+    const filePath = join(process.cwd(), 'uploads', key);
     if (!existsSync(filePath)) {
       this.logger.error('file not found');
       throw ApiError.NotFound('NOT_FOUND', { prop: 'File' });

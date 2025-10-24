@@ -15,10 +15,7 @@ export class UploadController {
     @UploadedFile(new FileValidationPipe({ ...UploadConfigs.avatar, optional: false }))
     file: Express.Multer.File,
   ) {
-    // console.log(file);
-    if (file) return this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
-
-    return 'kamu testing aja ya?';
+    if (file) return await this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
   }
 
   @Post('document')
@@ -27,7 +24,6 @@ export class UploadController {
     @UploadedFile(new FileValidationPipe({ ...UploadConfigs.document, optional: false }))
     file: Express.Multer.File,
   ) {
-    if (file) return this.uploadService.saveFile(file, UploadConfigs.document.folder);
-    return 'testing?';
+    if (file) return await this.uploadService.saveFile(file, UploadConfigs.document.folder);
   }
 }

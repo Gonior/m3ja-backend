@@ -11,7 +11,7 @@ export class FileController {
     if (!folder || !filename)
       throw ApiError.NotFound('NOT_FOUND', { prop: `${folder}/${filename ?? ''}` });
 
-    const { stream, contentType } = await this.fileService.getFile(folder, filename);
+    const { stream, contentType } = await this.fileService.getFile(`${folder}/${filename}`);
 
     return new StreamableFile(stream as unknown as Uint8Array<ArrayBufferLike>, {
       type: contentType,

@@ -37,7 +37,7 @@ export class LocalUploadService implements IUploadService {
     };
   }
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
-    this.logger.debug(`⚠️ start to save file ${file.filename} to ${folder}`);
+    this.logger.debug(`⚠️ start to save file ${file.originalname} to ${folder}`);
     const uploadeDir = join(process.cwd(), 'uploads', folder);
 
     // buat folder '/uploads' kalo semisal tidak ada
@@ -51,11 +51,12 @@ export class LocalUploadService implements IUploadService {
       this.logger.error(error);
       throw ApiError.Internal();
     });
-    this.logger.debug(`finish to save file ${file.filename} to ${folder}`);
+    this.logger.debug(`finish to save file ${file.originalname} to ${folder}`);
 
     return {
       originalName: file.originalname,
       savedAs: filename,
+      folder,
       key: `${folder}/${filename}`,
       size: file.size,
       mimeType: file.mimetype,

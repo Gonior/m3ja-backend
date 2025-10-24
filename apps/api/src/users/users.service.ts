@@ -5,12 +5,15 @@ import { CreateUserDto } from './dto/create-user-dto';
 import { AppLogger, userTable } from '@app/common';
 import { eq } from 'drizzle-orm';
 import { UpdateUserDto } from './dto/update-user-dto';
+import { ApiError } from '@app/common/errors';
+import { UploadService } from '@app/upload';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(DB_PROVIDER) private readonly db: ReturnType<typeof drizzle>,
     private readonly logger: AppLogger,
+    private readonly uploadService: UploadService,
   ) {
     this.logger.setContext(UsersService.name);
   }
@@ -47,7 +50,7 @@ export class UsersService {
       this.logger.debug('start update a user..');
       const [user] = await this.db
         .update(userTable)
-        .set({ ...data })
+        .set({ ...data, updatedAt: new Date() })
         .where(eq(userTable.id, id))
         .returning();
       this.logger.debug('finish update a user..');
@@ -60,7 +63,7 @@ export class UsersService {
       this.logger.debug('start update avatar a user..');
       const [user] = await this.db
         .update(userTable)
-        .set({ avatarKey })
+        .set({ avatarKey, updatedAt: new Date() })
         .where(eq(userTable.id, id))
         .returning();
       this.logger.debug('finish update avatar a user..');
@@ -73,11 +76,28 @@ export class UsersService {
       this.logger.debug('start change password user..');
       const [user] = await this.db
         .update(userTable)
-        .set({ password })
+        .set({ password, updatedAt: new Date() })
         .where(eq(userTable.id, id))
         .returning();
       this.logger.debug('finish change password user..');
       return user;
+    });
+  }
+  async deleteUser(id: number) {
+    return safeQuery(async () => {
+      this.logger.warn(`Start Delete user id ${id}`);
+      const deleted = await this.db.delete(userTable).where(eq(userTable.id, id)).returning();
+
+      this.logger.debug(`finish Delete user id ${id}`);
+      if (deleted.length >= 1) {
+        if (deleted[0].avatarKey || deleted[0].avatarKey !== null) {
+          this.logger.warn(
+            `srart to delete avatarKey after deleted user, avatarKey : ${deleted[0].avatarKey}`,
+          );
+          await this.uploadService.deleteFile(deleted[0].avatarKey);
+        }
+        return { success: true, message: `user id ${id} has been deleted!` };
+      } else throw ApiError.BadRequest('DATABASE_DELETE_ERROR');
     });
   }
 }

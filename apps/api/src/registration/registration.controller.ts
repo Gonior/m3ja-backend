@@ -4,7 +4,7 @@ import { CreateUserDto } from '../users/dto/create-user-dto';
 import { FileValidationPipe, JsonBody, UploadType } from '@app/common';
 import { UploadConfigs } from '@app/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { WORKER_UPLOAD_DONE } from '@app/shared';
+import { EVENT } from '@app/shared';
 @Controller('register')
 export class RegistrationController {
   constructor(private readonly registrationService: RegistrationService) {}
@@ -17,10 +17,5 @@ export class RegistrationController {
     file?: Express.Multer.File,
   ) {
     return await this.registrationService.register(createUserDto, file);
-  }
-
-  @EventPattern(WORKER_UPLOAD_DONE)
-  handleDone(@Payload() data: any) {
-    console.log({ form: 'api', data });
   }
 }

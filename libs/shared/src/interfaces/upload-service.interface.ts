@@ -1,5 +1,6 @@
 export interface IUploadFileResponse {
   originalName: string;
+  folder: string;
   savedAs: string;
   key: string; //object key yang dipake di cloudflare R2
   size: number;

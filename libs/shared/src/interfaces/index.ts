@@ -3,3 +3,4 @@ export * from './upload-service.interface';
 export * from './file-validation-options.interface';
 export * from './env.interface';
 export * from './file-service.interface';
+export * from './upload-event.interfaces';

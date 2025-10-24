@@ -26,10 +26,10 @@ export class UploadService implements IUploadService {
 
   async deleteFile(key: string): Promise<IDeletedFileResponse> {
     if (this.envService.isProduction) {
-      this.logger.debug('set delte to r2...');
+      this.logger.debug('set delete to r2...');
       return await this.r2UploadService.deleteFile(key);
     } else {
-      this.logger.debug('set delte to local...');
+      this.logger.debug('set delete to local...');
       return await this.localUpload.deleteFile(key);
     }
   }

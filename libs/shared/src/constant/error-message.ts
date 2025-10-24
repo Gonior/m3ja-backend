@@ -59,7 +59,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     id: 'Terjadi kesalahan saat upload',
   },
   DATABASE_DELETE_ERROR: {
-    en: 'An error occured during upload',
+    en: 'An error occured during delete',
     id: 'Terjadi kesalahan saat hapus',
   },
   VALIDATE_ERROR: {

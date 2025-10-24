@@ -1,4 +1,4 @@
-import { WORKER_SERVICE, WORKER_UPLOAD_AVATAR } from '@app/shared';
+import { QUEUE, WORKER_SERVICE } from '@app/shared';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
@@ -10,7 +10,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://localhost:5672'],
-          queue: 'upload_queue',
+          queue: QUEUE.WORKER_SERVICE_QUEUE,
           queueOptions: { durable: true },
         },
       },

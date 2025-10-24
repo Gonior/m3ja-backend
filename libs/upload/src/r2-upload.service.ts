@@ -39,7 +39,6 @@ export class R2UploadService implements IUploadService {
     try {
       this.logger.debug('start to upload to r2');
       const stream = Readable.from(file.buffer);
-      console.log({ stream });
       const filename = generateFilename(file);
       const key = `${folder.replace(/\/$/, '')}/${filename}`;
 
@@ -57,6 +56,7 @@ export class R2UploadService implements IUploadService {
       return {
         originalName: file.originalname,
         savedAs: filename,
+        folder,
         key,
         size: file.size,
         mimeType: file.mimetype,
@@ -69,6 +69,7 @@ export class R2UploadService implements IUploadService {
 
   async deleteFile(key: string): Promise<IDeletedFileResponse> {
     try {
+      this.logger.warn('start to delete file from r2');
       await this.r2.send(
         new DeleteObjectCommand({
           Bucket: this.bucket,

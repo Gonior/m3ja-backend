@@ -4,9 +4,9 @@ import { AppModule } from './app.module';
 import { AllExceptionFilter, AppLogger, LoggingInterceptor } from '@app/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 import { EnvService } from '@app/common/config/env.config.service';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { QUEUE } from '@app/shared';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
@@ -16,7 +16,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: ['amqp://localhost:5672'],
-      queue: 'api_queue',
+      queue: QUEUE.API_SERVICE_QUEUE,
       queueOptions: { durable: true },
     },
   });
