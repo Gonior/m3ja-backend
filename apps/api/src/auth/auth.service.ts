@@ -1,40 +1,36 @@
 import { AppLogger, userTable } from '@app/common';
 import { DB_PROVIDER, TUser } from '@app/shared';
 import { Inject, Injectable } from '@nestjs/common';
-
+import * as argon2 from 'argon2';
 import { AuthDto } from './dto/auth.dto';
 import { ApiError } from '@app/common/errors/api-error';
-import { UsersService } from '../users/users.service';
-import { CreateUserDto } from '../users/dto/create-user-dto';
+import { UserService } from '../user/user.service';
+import { CreateUserDto } from '../user/dto/create-user-dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly logger: AppLogger,
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
   ) {}
 
   async login(authDto: AuthDto): Promise<TUser | undefined> {
-    this.logger.log('start validating..');
+    this.logger.warn('start validating..', AuthService.name);
     const user = await this.userService.findByEmail(authDto.email);
     if (!user) throw ApiError.Unathorized();
-    if (user?.password !== authDto.password) throw ApiError.Unathorized();
+
+    const isVerified = await this.verify(user.password, authDto.password);
+    this.logger.debug(`isVerified ${isVerified}`);
+    if (!isVerified) throw ApiError.Unathorized();
     //generate token
     this.createToken();
 
-    this.logger.log('finish validated');
+    this.logger.debug('finish validated', AuthService.name);
     return user;
   }
 
-  async register(createUserDto: CreateUserDto) {
-    this.logger.log('start call register()');
-    const user = this.userService.createUser(createUserDto);
-    if (!user) throw ApiError.BadRequest('REGISTER_ACCOUNT_ERROR');
-    // generate token
-    this.createToken();
-    this.logger.log('register() is called');
-
-    return user;
+  async verify(hashedPassword: string, password: string) {
+    return await argon2.verify(hashedPassword, password);
   }
 
   createToken() {}

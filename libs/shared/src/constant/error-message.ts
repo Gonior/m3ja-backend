@@ -42,9 +42,9 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: 'Property {{field}} should not exist',
     id: 'Kata kunci {{field}} tidak terdaftar',
   },
-  DATABASE_ERROR: {
-    en: 'Database Error',
-    id: 'Terjadi kesalahan pada database',
+  DB_UNKNOW_ERROR: {
+    en: 'Unexpeted database Error',
+    id: 'Terjadi kesalahan tidak terduga pada database',
   },
   NOT_FOUND: {
     en: '{{prop}} is not found',
@@ -54,11 +54,11 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: 'Invalid credential',
     id: 'Kredensial tidak valid',
   },
-  DATABASE_UPLOAD_ERROR: {
+  DB_UPLOAD_ERROR: {
     en: 'An error occured during upload',
     id: 'Terjadi kesalahan saat upload',
   },
-  DATABASE_DELETE_ERROR: {
+  DB_DELETE_ERROR: {
     en: 'An error occured during delete',
     id: 'Terjadi kesalahan saat hapus',
   },
@@ -89,5 +89,22 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
   UNREADABLE_FILE: {
     en: 'Invalid image format or unreadable file',
     id: 'Format image salah atau tidak dapa membaca file',
+  },
+
+  DB_CONNECTION_ERROR: {
+    en: 'Database connection failed',
+    id: 'Gagal menyambungkan ke database',
+  },
+  DB_DUPLICATE_ENTRY: {
+    en: 'Duplicate entry (unique constraint)',
+    id: 'Duplicate entry (unique constraint)',
+  },
+  DB_FOREIGN_KEY: {
+    en: 'Invalid reference (foreign key violation',
+    id: 'Invalid reference (foreign key violation',
+  },
+  DB_INVALID_INPUT: {
+    en: 'Invalid data format',
+    id: 'Format data salah',
   },
 } as const;

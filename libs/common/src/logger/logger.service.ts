@@ -15,11 +15,10 @@ export class AppLogger implements LoggerService {
     this.logger.warn(message, { context });
   }
 
-  error(message: string, trance?: string, context?: string) {
-    this.logger.error(`${message} ${trance || ''}`, { context });
-  }
-
   debug(message: string, context?: string) {
     this.logger.debug(message, { context });
+  }
+  error(message: string, trance?: string, context?: string) {
+    this.logger.error(`${message} ${trance || ''}`, { context });
   }
 }

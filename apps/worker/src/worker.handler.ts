@@ -13,14 +13,11 @@ export class WorkerHandler {
   ) {}
   @EventPattern(EVENT.WORKER_UPLOAD_AVATAR)
   async handleUpload(@Payload() data: IUploadEvent) {
-    this.logger.debug(
-      `receive avatar data from API with user id ${data.userId}`,
-      WorkerHandler.name,
-    );
+    this.logger.debug(`➡️ Receive avatar from API (id: ${data.userId})`, WorkerHandler.name);
     const userId = data.userId;
     let newData = (await this.resizeImageService.resizeImage(data)) as IUploadEvent;
     newData.userId = userId;
-    this.logger.debug(`send avatar data to API with user id ${newData.userId}`, WorkerHandler.name);
+    this.logger.log(`✅ Send back avatar to API (id: ${newData.userId})`, WorkerHandler.name);
     this.apiClient.emit(EVENT.WORKER_UPLOAD_DONE, newData);
   }
 }

@@ -36,7 +36,7 @@ export class R2UploadService implements IUploadService {
 
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
     try {
-      this.logger.debug('start to upload to r2', R2UploadService.name);
+      this.logger.debug('🔧 Uploading file ...', R2UploadService.name);
       const stream = Readable.from(file.buffer);
       const filename = generateFilename(file);
       const key = `${folder.replace(/\/$/, '')}/${filename}`;
@@ -51,7 +51,6 @@ export class R2UploadService implements IUploadService {
         }),
       );
 
-      this.logger.debug('finish to upload to r2', R2UploadService.name);
       return {
         originalName: file.originalname,
         savedAs: filename,
@@ -62,27 +61,26 @@ export class R2UploadService implements IUploadService {
       };
     } catch (error) {
       this.logger.error(error, R2UploadService.name);
-      throw ApiError.Internal('DATABASE_UPLOAD_ERROR');
+      throw ApiError.Internal('DB_UPLOAD_ERROR');
     }
   }
 
   async deleteFile(key: string): Promise<IDeletedFileResponse> {
     try {
-      this.logger.warn('start to delete file from r2', R2UploadService.name);
+      this.logger.debug('🔧 Deleting file ...', R2UploadService.name);
       await this.r2.send(
         new DeleteObjectCommand({
           Bucket: this.bucket,
           Key: key,
         }),
       );
-      this.logger.debug('finish to delete file from r2', R2UploadService.name);
       return {
         success: true,
         message: 'File deleted!',
       };
     } catch (error) {
-      this.logger.error(error, R2UploadService.name);
-      throw ApiError.Internal('DATABASE_DELETE_ERROR');
+      this.logger.error(error, undefined, R2UploadService.name);
+      throw ApiError.Internal('DB_DELETE_ERROR');
     }
   }
 }

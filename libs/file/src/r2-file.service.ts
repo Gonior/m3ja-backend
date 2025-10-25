@@ -30,7 +30,7 @@ export class R2FileService implements IFileService {
   }
   async getFile(key: string) {
     try {
-      this.logger.debug('start get file from r2', R2FileService.name);
+      this.logger.debug('🔧 Getting file...', R2FileService.name);
       const command = new GetObjectCommand({
         Bucket: this.bucket,
         Key: key,
@@ -38,7 +38,7 @@ export class R2FileService implements IFileService {
       const res = await this.r2.send(command);
       const stream = res.Body as NodeJS.ReadableStream;
       const contentType = res.ContentType || 'application/octet-stream';
-      this.logger.debug('finish get file from r2', R2FileService.name);
+
       return { stream, contentType };
     } catch (error) {
       this.logger.error(error, R2FileService.name);

@@ -7,7 +7,7 @@ export class ApiError extends HttpException {
     errorCode: ErrorCode,
     status: HttpStatus = HttpStatus.BAD_REQUEST,
     params?: Record<string, any>,
-    details?: IApiErrorDetail[],
+    details?: IApiErrorDetail[] | string,
   ) {
     const response = {
       errorCode,
@@ -20,7 +20,7 @@ export class ApiError extends HttpException {
   static BadRequest(
     errorCode: ErrorCode,
     params?: Record<string, any>,
-    details?: IApiErrorDetail[],
+    details?: IApiErrorDetail[] | string,
   ) {
     return new ApiError(errorCode, HttpStatus.BAD_REQUEST, params, details);
   }
@@ -28,7 +28,7 @@ export class ApiError extends HttpException {
   static NotFound(
     errorCode: ErrorCode = 'NOT_FOUND',
     params?: Record<string, any>,
-    details?: IApiErrorDetail[],
+    details?: IApiErrorDetail[] | string,
   ) {
     return new ApiError(errorCode, HttpStatus.NOT_FOUND, params, details);
   }
@@ -37,15 +37,23 @@ export class ApiError extends HttpException {
     return new ApiError(errorCode, HttpStatus.FORBIDDEN);
   }
 
-  static Conflict(errorCode: ErrorCode) {
-    return new ApiError(errorCode, HttpStatus.CONFLICT);
+  static Conflict(
+    errorCode: ErrorCode,
+    params?: Record<string, any>,
+    details?: IApiErrorDetail[] | string,
+  ) {
+    return new ApiError(errorCode, HttpStatus.CONFLICT, params, details);
   }
 
   static Forbidden(errorCode: ErrorCode = 'FORBIDDEN') {
     return new ApiError(errorCode, HttpStatus.FORBIDDEN);
   }
 
-  static Internal(errorCode: ErrorCode = 'INTERNAL_SERVER_ERROR') {
-    return new ApiError(errorCode, HttpStatus.INTERNAL_SERVER_ERROR);
+  static Internal(
+    errorCode: ErrorCode = 'INTERNAL_SERVER_ERROR',
+    params?: Record<string, any>,
+    details?: IApiErrorDetail[] | string,
+  ) {
+    return new ApiError(errorCode, HttpStatus.INTERNAL_SERVER_ERROR, params, details);
   }
 }

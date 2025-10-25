@@ -10,7 +10,7 @@ import { join } from 'path';
 export class LocalFileService implements IFileService {
   constructor(private readonly logger: AppLogger) {}
   async getFile(key: string) {
-    this.logger.debug('start get local file...', LocalFileService.name);
+    this.logger.debug('🔧 Getting file...', LocalFileService.name);
     const filePath = join(process.cwd(), 'uploads', key);
     if (!existsSync(filePath)) {
       this.logger.error('file not found');
