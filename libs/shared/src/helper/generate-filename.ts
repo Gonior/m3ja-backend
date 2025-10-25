@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid';
+import { randomBytes } from 'crypto';
 export const generateFilename = (file: Express.Multer.File) => {
   // biar ga bentrok sama user lain
-  return `${uuid()}-${file.originalname}`;
+  return `${randomBytes(12).toString('hex')}-${file.originalname}`;
 };

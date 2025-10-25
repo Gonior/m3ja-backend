@@ -16,20 +16,20 @@ export class UploadService implements IUploadService {
 
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
     if (this.envService.isProduction) {
-      this.logger.debug('set upload to r2...');
+      this.logger.debug('set upload to r2...', UploadService.name);
       return await this.r2UploadService.saveFile(file, folder);
     } else {
-      this.logger.debug('set upload to local...');
+      this.logger.debug('set upload to local...', UploadService.name);
       return await this.localUpload.saveFile(file, folder);
     }
   }
 
   async deleteFile(key: string): Promise<IDeletedFileResponse> {
     if (this.envService.isProduction) {
-      this.logger.debug('set delete to r2...');
+      this.logger.debug('set delete to r2...', UploadService.name);
       return await this.r2UploadService.deleteFile(key);
     } else {
-      this.logger.debug('set delete to local...');
+      this.logger.debug('set delete to local...', UploadService.name);
       return await this.localUpload.deleteFile(key);
     }
   }

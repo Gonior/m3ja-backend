@@ -12,15 +12,13 @@ export class FileService implements IFileService {
     private readonly logger: AppLogger,
     private readonly localFileService: LocalFileService,
     private readonly r2FileService: R2FileService,
-  ) {
-    this.logger.setContext(FileService.name + 'Libs');
-  }
+  ) {}
   async getFile(key: string) {
     if (this.envService.isProduction) {
-      this.logger.debug('getFile set to r2...');
+      this.logger.debug('getFile set to r2...', R2FileService.name);
       return await this.r2FileService.getFile(key);
     } else {
-      this.logger.debug('getFile set to local...');
+      this.logger.debug('getFile set to local...', R2FileService.name);
       return await this.localFileService.getFile(key);
     }
   }

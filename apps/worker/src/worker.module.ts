@@ -7,19 +7,23 @@ import { QUEUE } from '@app/shared';
 import { ResizeImageAvatarService } from './resize-image/resize-image-avatar.service';
 import { UploadModule } from '@app/upload';
 import { FileModule } from '@app/file';
+import { EnvService } from '@app/common/config/env.config.service';
 
 @Module({
   imports: [
     CommonModule,
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'API_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://localhost:5672'],
-          queue: QUEUE.API_SERVICE_QUEUE,
-          queueOptions: { durable: true },
-        },
+        inject: [EnvService],
+        useFactory: (env: EnvService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [env.rabbitmqConfig.url],
+            queue: QUEUE.API_SERVICE_QUEUE,
+            queueOptions: { durable: true },
+          },
+        }),
       },
     ]),
     UploadModule,

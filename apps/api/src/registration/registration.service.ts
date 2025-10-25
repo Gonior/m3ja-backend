@@ -3,7 +3,6 @@ import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user-dto';
 import { ApiError } from '@app/common/errors';
 import * as argon2 from 'argon2';
-import { EnvService } from '@app/common/config/env.config.service';
 import { AppLogger, UploadConfigs } from '@app/common';
 import { IUploadFileResponse, WORKER_SERVICE, EVENT } from '@app/shared';
 import { ClientProxy } from '@nestjs/microservices';
@@ -13,17 +12,16 @@ export class RegistrationService {
   constructor(
     private readonly userService: UsersService,
     private readonly uploadService: UploadService,
-    private readonly envService: EnvService,
     private readonly logger: AppLogger,
     @Inject(WORKER_SERVICE) private readonly uploadClient: ClientProxy,
-  ) {
-    this.logger.setContext(RegistrationService.name);
-  }
+  ) {}
 
   async register(createUserDto: CreateUserDto, file?: Express.Multer.File) {
+    this.logger.warn(`Start register user...`, RegistrationService.name);
     let responseFile: IUploadFileResponse;
 
     let existsUser = await this.userService.findByEmail(createUserDto.email);
+
     if (existsUser) throw ApiError.BadRequest('ALREADY_EXISTS', { field: 'email' });
     // hash password with default setting
     let hashedPassword = await argon2.hash(createUserDto.password);
@@ -37,13 +35,18 @@ export class RegistrationService {
       if (responseFile) {
         responseFile.key = responseFile.key;
         await this.userService.updateAvatar(user.id, responseFile.key);
-        this.logger.debug(`send avatar data to worker with user id ${user.id}`);
+
+        this.logger.debug(
+          `send avatar data to worker with user id ${user.id}`,
+          RegistrationService.name,
+        );
         this.uploadClient.emit(EVENT.WORKER_UPLOAD_AVATAR, {
           userId: user.id,
           ...responseFile,
         });
       }
     }
+    this.logger.warn(`Finish register user...`, RegistrationService.name);
     return {
       success: true,
       message: 'user created!',

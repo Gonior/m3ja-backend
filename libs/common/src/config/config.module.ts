@@ -10,7 +10,7 @@ import { EnvService } from './env.config.service';
     NestConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [`.env.${process.env.NODE_ENV ?? 'development'}`, '.env'],
-      validationSchema: configValidationSchema,
+      validationSchema: process.env.NODE_ENV === 'test' ? undefined : configValidationSchema,
       expandVariables: true,
     }),
   ],

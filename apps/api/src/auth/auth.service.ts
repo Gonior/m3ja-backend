@@ -1,8 +1,7 @@
 import { AppLogger, userTable } from '@app/common';
 import { DB_PROVIDER, TUser } from '@app/shared';
 import { Inject, Injectable } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/postgres-js';
+
 import { AuthDto } from './dto/auth.dto';
 import { ApiError } from '@app/common/errors/api-error';
 import { UsersService } from '../users/users.service';
@@ -11,12 +10,9 @@ import { CreateUserDto } from '../users/dto/create-user-dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(DB_PROVIDER) private readonly db: ReturnType<typeof drizzle>,
     private readonly logger: AppLogger,
     private readonly userService: UsersService,
-  ) {
-    this.logger.setContext(AuthService.name);
-  }
+  ) {}
 
   async login(authDto: AuthDto): Promise<TUser | undefined> {
     this.logger.log('start validating..');

@@ -8,11 +8,9 @@ import { join } from 'path';
 
 @Injectable()
 export class LocalFileService implements IFileService {
-  constructor(private readonly logger: AppLogger) {
-    this.logger.setContext(LocalFileService.name);
-  }
+  constructor(private readonly logger: AppLogger) {}
   async getFile(key: string) {
-    this.logger.debug('start get local file...');
+    this.logger.debug('start get local file...', LocalFileService.name);
     const filePath = join(process.cwd(), 'uploads', key);
     if (!existsSync(filePath)) {
       this.logger.error('file not found');
@@ -21,7 +19,7 @@ export class LocalFileService implements IFileService {
 
     const stream = createReadStream(filePath) as NodeJS.ReadableStream;
     const contentType = lookup(filePath) || 'application/octet-stream';
-    this.logger.debug('finish get local file...');
+    this.logger.debug('finish get local file...', LocalFileService.name);
     return { stream, contentType };
   }
 }

@@ -11,11 +11,9 @@ export class ResizeImageAvatarService {
     private readonly fileService: FileService,
     private readonly uploadService: UploadService,
     private readonly logger: AppLogger,
-  ) {
-    this.logger.setContext(ResizeImageAvatarService.name);
-  }
+  ) {}
   async resizeImage(data: IUploadFileResponse) {
-    this.logger.debug('start resize image');
+    this.logger.debug('start resize image', 'ResizeImage');
     const { stream } = await this.fileService.getFile(data.key);
 
     try {
@@ -43,12 +41,12 @@ export class ResizeImageAvatarService {
       );
       if (newResponseUploadFile) {
         await this.uploadService.deleteFile(data.key);
-        this.logger.debug('deleted old image');
+        this.logger.debug('deleted old image', 'ResizeImage');
       }
-      this.logger.warn('finish resize image');
+      this.logger.warn('finish resize image', 'ResizeImage');
       return newResponseUploadFile;
     } catch (e) {
-      this.logger.error(`error while resize image ${JSON.stringify(e)}`);
+      this.logger.error(`error while resize image ${JSON.stringify(e)}`, 'ResizeImage');
     }
   }
 

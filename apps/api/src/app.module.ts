@@ -11,8 +11,11 @@ import { MulterMaxSizeMiddleware } from '@app/common/middleware/multer-maxsize.m
 import { RegistrationModule } from './registration/registration.module';
 import { RabbitMqModule } from './rabbit-mq/rabbit-mq.module';
 import { FileModule } from './file/file.module';
+
 import { FileModule as FileModuleCore } from '@app/file';
 import { UploadModule as UploadModuleCore } from '@app/upload';
+import { RequestContextMiddleware } from '@app/common';
+import { ClsModule } from 'nestjs-cls';
 
 @Module({
   imports: [
@@ -26,6 +29,10 @@ import { UploadModule as UploadModuleCore } from '@app/upload';
     UploadModuleCore,
     FileModule,
     FileModuleCore,
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -39,5 +46,6 @@ import { UploadModule as UploadModuleCore } from '@app/upload';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(MulterMaxSizeMiddleware).forRoutes('upload', 'register');
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
   }
 }

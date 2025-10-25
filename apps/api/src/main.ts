@@ -11,11 +11,13 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
   });
+  // set env config
+  const config = app.get(EnvService);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://localhost:5672'],
+      urls: [config.rabbitmqConfig.url],
       queue: QUEUE.API_SERVICE_QUEUE,
       queueOptions: { durable: true },
     },
@@ -35,18 +37,16 @@ async function bootstrap() {
   //   prefix: '/file/',
   // });
 
-  // set env config
-  const config = app.get(EnvService);
-
   // set logger wiston
-  const logger = new AppLogger();
+  const logger = app.get(AppLogger);
   app.useLogger(logger);
-
+  // picu onModuleDestroy()
+  app.enableShutdownHooks();
   // global error handler
-  app.useGlobalFilters(new AllExceptionFilter(new AppLogger()));
+  app.useGlobalFilters(new AllExceptionFilter(logger));
 
   // global http logger
-  app.useGlobalInterceptors(new LoggingInterceptor(new AppLogger()));
+  app.useGlobalInterceptors(new LoggingInterceptor(logger));
 
   const host = config.appConfig.host || '127.0.0.1';
   const port = config.appConfig.apiPort || 3000;

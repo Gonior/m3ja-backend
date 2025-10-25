@@ -15,7 +15,6 @@ export class R2FileService implements IFileService {
     private readonly logger: AppLogger,
     private readonly config: EnvService,
   ) {
-    this.logger.setContext(R2FileService.name);
     this.bucket = config.r2Config.bucketName!;
     this.endpoint = config.r2Config.endpoint!;
 
@@ -23,15 +22,15 @@ export class R2FileService implements IFileService {
       region: 'auto',
       endpoint: this.endpoint,
       credentials: {
-        accessKeyId: config.r2Config.accessKeyId!,
-        secretAccessKey: config.r2Config.secretAccessKey!,
+        accessKeyId: this.config.r2Config.accessKeyId!,
+        secretAccessKey: this.config.r2Config.secretAccessKey!,
       },
       forcePathStyle: false,
     });
   }
   async getFile(key: string) {
     try {
-      this.logger.debug('start get file from r2');
+      this.logger.debug('start get file from r2', R2FileService.name);
       const command = new GetObjectCommand({
         Bucket: this.bucket,
         Key: key,
@@ -39,9 +38,10 @@ export class R2FileService implements IFileService {
       const res = await this.r2.send(command);
       const stream = res.Body as NodeJS.ReadableStream;
       const contentType = res.ContentType || 'application/octet-stream';
+      this.logger.debug('finish get file from r2', R2FileService.name);
       return { stream, contentType };
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error, R2FileService.name);
       throw ApiError.NotFound('NOT_FOUND', { prop: 'File' });
     }
   }

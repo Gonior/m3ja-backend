@@ -17,27 +17,25 @@ export class LocalUploadService implements IUploadService {
   constructor(
     private readonly logger: AppLogger,
     private readonly config: EnvService,
-  ) {
-    this.logger.setContext('LocalUploadService');
-  }
+  ) {}
   getFile(key: string): Promise<GetObjectCommandOutput> {
     throw new Error('Method not implemented.');
   }
   async deleteFile(key: string): Promise<IDeletedFileResponse> {
-    this.logger.debug(`⚠️ start to delete file ${key}`);
+    this.logger.debug(`⚠️ start to delete file ${key}`, LocalUploadService.name);
     const filePath = path.join(process.cwd(), 'uploads', key);
     await fs.rm(filePath).catch((error) => {
       this.logger.error(error);
       throw ApiError.Internal();
     });
-    this.logger.debug('finish to delete file');
+    this.logger.debug('finish to delete file', LocalUploadService.name);
     return {
       success: true,
       message: 'File deleted!',
     };
   }
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
-    this.logger.debug(`⚠️ start to save file ${file.originalname} to ${folder}`);
+    this.logger.debug(`⚠️ start to save file to ${folder}`, LocalUploadService.name);
     const uploadeDir = join(process.cwd(), 'uploads', folder);
 
     // buat folder '/uploads' kalo semisal tidak ada
@@ -48,10 +46,13 @@ export class LocalUploadService implements IUploadService {
 
     // simpan file
     await fs.writeFile(filePath, file.buffer).catch((error) => {
-      this.logger.error(error);
+      this.logger.error(error, LocalUploadService.name);
       throw ApiError.Internal();
     });
-    this.logger.debug(`finish to save file ${file.originalname} to ${folder}`);
+    this.logger.debug(
+      `finish to save file ${file.originalname} to ${folder}`,
+      LocalUploadService.name,
+    );
 
     return {
       originalName: file.originalname,
