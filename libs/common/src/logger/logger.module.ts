@@ -34,7 +34,8 @@ function colorizeLevel(level: string) {
         transports: [
           new winston.transports.Console({
             format: winston.format.combine(
-              winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+              // winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+              winston.format.timestamp({ format: 'HH:mm:ss' }),
               winston.format.printf((info) => {
                 const cls = ClsServiceManager.getClsService();
                 const requestId = cls?.get('requestId');

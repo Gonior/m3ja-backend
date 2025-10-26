@@ -4,7 +4,7 @@ import { CreateUserDto } from '../user/dto/create-user-dto';
 import { ApiError } from '@app/common/errors';
 import * as argon2 from 'argon2';
 import { AppLogger, UploadConfigs } from '@app/common';
-import { IUploadFileResponse, WORKER_SERVICE, EVENT } from '@app/shared';
+import { IUploadFileResponse, WORKER_SERVICE, EVENT, IUploadEvent } from '@app/shared';
 import { ClientProxy } from '@nestjs/microservices';
 import { UploadService } from '@app/upload';
 @Injectable()
@@ -26,16 +26,19 @@ export class RegistrationService {
     if (file) {
       this.logger.debug(`🔧 Avatar detected...`, RegistrationService.name);
       responseFile = await this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
-
       if (responseFile) {
-        responseFile.key = responseFile.key;
-        await this.userService.updateAvatar(user.id, responseFile.key);
+        const uploadEvent: IUploadEvent = {
+          ...responseFile,
+          userId: user.id,
+          avatarResizeStatus: 'processing',
+        };
+        await this.userService.updateAvatar(uploadEvent.userId, {
+          avatarKey: uploadEvent.key,
+          avatarResizeStatus: uploadEvent.avatarResizeStatus,
+        });
 
         this.logger.debug(`🔧 Sending to worker (id :${user.id})`, RegistrationService.name);
-        this.uploadClient.emit(EVENT.WORKER_UPLOAD_AVATAR, {
-          userId: user.id,
-          ...responseFile,
-        });
+        this.uploadClient.emit(EVENT.WORKER_UPLOAD_AVATAR, uploadEvent);
       }
     }
     this.logger.log(`✅ User registered successfully (id: ${user.id})`, RegistrationService.name);

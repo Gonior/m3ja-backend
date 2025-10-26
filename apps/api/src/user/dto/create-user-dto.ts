@@ -6,7 +6,9 @@ import {
 } from '@app/shared';
 import { TUser } from '@app/shared';
 import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
-export class CreateUserDto implements Omit<TUser, 'id' | 'createdAt' | 'updatedAt'> {
+export class CreateUserDto
+  implements Omit<TUser, 'id' | 'createdAt' | 'updatedAt' | 'avatarResizeStatus'>
+{
   @MinLength(MIN_LENGTH_DISPLAY_NAME, { context: { min: MIN_LENGTH_DISPLAY_NAME } })
   @MaxLength(MAX_LENGTH_DISPLAY_NAME, { context: { max: MAX_LENGTH_DISPLAY_NAME } })
   @IsNotEmpty()

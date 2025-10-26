@@ -22,6 +22,13 @@
       "when": 1761217629138,
       "tag": "0002_bumpy_proemial_gods",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1761455470006,
+      "tag": "0003_curvy_sugar_man",
+      "breakpoints": true
     }
   ]
 }

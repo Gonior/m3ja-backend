@@ -2,12 +2,12 @@ export const DB_PROVIDER = 'DB_PROVIDER';
 export const WORKER_SERVICE = 'WORKER_SERVICE';
 
 export const EVENT = {
-  WORKER_UPLOAD_AVATAR: 'WORKER_UPLOAD_AVATAR',
-  WORKER_UPLOAD_DONE: 'WORKER_UPLOAD_DONE',
+  WORKER_UPLOAD_AVATAR: 'user.created.avatar',
+  WORKER_UPLOAD_DONE: 'user.avatar.done',
 };
 export const QUEUE = {
-  WORKER_SERVICE_QUEUE: 'WORKER_SERVICE_QUEUE',
-  API_SERVICE_QUEUE: 'API_SERVICE_QUEUE',
+  WORKER_SERVICE_QUEUE: 'worker.service.queue',
+  API_SERVICE_QUEUE: 'api.service.queue',
 };
 
 export const MIN_LENGTH_PASSWORD = 8;

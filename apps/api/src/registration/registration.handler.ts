@@ -13,11 +13,14 @@ export class RegistrationHandler {
   @EventPattern(EVENT.WORKER_UPLOAD_DONE)
   async handleDone(@Payload() data: IUploadEvent) {
     this.logger.debug(
-      `➡️ Receive new avatar from worker (id: ${data.userId})`,
+      `➡️ Receive new avatar (${data.avatarResizeStatus}) from worker (id: ${data.userId})`,
       RegistrationHandler.name,
     );
-    if (data && data.userId && data.key) {
-      await this.userService.updateAvatar(data.userId, data.key);
+    if (data && data.userId && data.key && data.avatarResizeStatus) {
+      await this.userService.updateAvatar(data.userId, {
+        avatarKey: data.key,
+        avatarResizeStatus: data.avatarResizeStatus,
+      });
     }
   }
 }

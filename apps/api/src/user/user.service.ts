@@ -6,6 +6,7 @@ import { ApiError } from '@app/common/errors';
 import { UploadService } from '@app/upload';
 import { UserRepository } from './user.repository';
 import * as argon2 from 'argon2';
+import { type TUser } from '@app/shared';
 
 @Injectable()
 export class UserService {
@@ -54,9 +55,19 @@ export class UserService {
     return { success: true, message: `user has been deleted!`, data: deleted };
   }
 
-  async updateAvatar(id: number, avatarKey: string) {
-    this.logger.debug(`🔧 Updating avatarKey (id: ${id})`, UserService.name);
-    const user = await this.userRepo.updateAvatar(id, avatarKey);
+  async updateAvatar(
+    id: number,
+    avatarData: {
+      avatarKey: string;
+      avatarResizeStatus: TUser['avatarResizeStatus'];
+    },
+  ) {
+    avatarData.avatarResizeStatus = avatarData.avatarResizeStatus ?? 'none';
+    this.logger.debug(
+      `🔧 Updating avatarKey (id: ${id}) (${avatarData.avatarResizeStatus})`,
+      UserService.name,
+    );
+    const user = await this.userRepo.updateAvatar(id, avatarData);
     this.logger.debug(`✅ User AvatarKey updated (id: ${id})`, UserService.name);
     return user;
   }

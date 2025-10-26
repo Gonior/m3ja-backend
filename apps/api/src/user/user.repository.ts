@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { UploadService } from '@app/upload';
+import { TUser } from '@app/shared';
 
 @Injectable()
 export class UserRepository {
@@ -33,11 +34,14 @@ export class UserRepository {
       return user;
     }, 'UserRepository.createUser');
   }
-  async updateAvatar(id: number, avatarKey: string) {
+  async updateAvatar(
+    id: number,
+    avatarData: { avatarKey: string; avatarResizeStatus: TUser['avatarResizeStatus'] },
+  ) {
     return await this.orm.safeExcute(async (db) => {
       const [user] = await db
         .update(userTable)
-        .set({ avatarKey, updatedAt: new Date() })
+        .set({ ...avatarData, updatedAt: new Date() })
         .where(eq(userTable.id, id))
         .returning();
 

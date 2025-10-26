@@ -1,6 +1,6 @@
 import { AppLogger } from '@app/common';
 import { FileService } from '@app/file';
-import { IUploadFileResponse } from '@app/shared';
+import { IUploadEvent, IUploadFileResponse } from '@app/shared';
 import { UploadService } from '@app/upload';
 import { Injectable } from '@nestjs/common';
 import sharp from 'sharp';
@@ -12,7 +12,7 @@ export class ResizeImageAvatarService {
     private readonly uploadService: UploadService,
     private readonly logger: AppLogger,
   ) {}
-  async resizeImage(data: IUploadFileResponse) {
+  async resizeImage(data: IUploadEvent) {
     this.logger.debug('➡️ Start resize image', 'ResizeImage');
     const { stream } = await this.fileService.getFile(data.key);
 
@@ -44,7 +44,12 @@ export class ResizeImageAvatarService {
         await this.uploadService.deleteFile(data.key);
       }
       this.logger.log('✅ Finish resize image', 'ResizeImage');
-      return newResponseUploadFile;
+      const newUploadEvent: IUploadEvent = {
+        ...newResponseUploadFile,
+        userId: data.userId,
+        avatarResizeStatus: 'done',
+      };
+      return newUploadEvent;
     } catch (e) {
       this.logger.error(`❌ Error while resize image ${JSON.stringify(e)}`, 'ResizeImage');
     }
