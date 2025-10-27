@@ -7,6 +7,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { EnvService } from '@app/common/config/env.config.service';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { QUEUE } from '@app/shared';
+import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
@@ -37,6 +38,7 @@ async function bootstrap() {
   //   prefix: '/file/',
   // });
 
+  app.use(cookieParser());
   // set logger wiston
   const logger = app.get(AppLogger);
   app.useLogger(logger);

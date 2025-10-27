@@ -9,8 +9,8 @@ export const configValidationSchema = Joi.object({
   API_PORT: Joi.number().default(3000),
   WORKER_PORT: Joi.number().default(3001),
 
-  JWT_SECRET_KEY: Joi.string().min(8).required(),
-  SALT: Joi.number().default(10),
+  JWT_ACCESS_SECRET: Joi.string().min(8).required(),
+  JWT_REFRESH_SECRET: Joi.string().min(8).required(),
 
   DB_URL: Joi.string().uri().required(),
   REDIS_URL: Joi.string().uri().required(),

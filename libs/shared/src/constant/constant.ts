@@ -1,4 +1,3 @@
-export const DB_PROVIDER = 'DB_PROVIDER';
 export const WORKER_SERVICE = 'WORKER_SERVICE';
 
 export const EVENT = {
@@ -9,6 +8,15 @@ export const QUEUE = {
   WORKER_SERVICE_QUEUE: 'worker.service.queue',
   API_SERVICE_QUEUE: 'api.service.queue',
 };
+
+export const TTL = {
+  STR_ACCESS_TOKEN: '15m',
+  STR_REFRESH_TOKEN: '30d',
+  SCD_ACCESS_TOKEN: 15 * 60,
+  MSSCD_ACCESS_TOKEN: 15 * 60 * 1000,
+  SCD_REFRESH_TOKEN: 7 * 24 * 60 * 60,
+  MSSCD_REFRESH_TOKEN: 7 * 24 * 60 * 60 * 1000,
+} as const;
 
 export const MIN_LENGTH_PASSWORD = 8;
 export const MIN_LENGTH_DISPLAY_NAME = 1;

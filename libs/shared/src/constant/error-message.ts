@@ -107,4 +107,8 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: 'Invalid data format',
     id: 'Format data salah',
   },
+  SAVE_TOKEN_ERROR: {
+    en: 'Error while saving token',
+    id: 'Error ketika menyimpan token',
+  },
 } as const;

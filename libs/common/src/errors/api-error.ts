@@ -33,8 +33,12 @@ export class ApiError extends HttpException {
     return new ApiError(errorCode, HttpStatus.NOT_FOUND, params, details);
   }
 
-  static Unathorized(errorCode: ErrorCode = 'UNAUTHORIZED') {
-    return new ApiError(errorCode, HttpStatus.FORBIDDEN);
+  static Unathorized(
+    errorCode: ErrorCode = 'UNAUTHORIZED',
+    params?: Record<string, any>,
+    details?: IApiErrorDetail[] | string,
+  ) {
+    return new ApiError(errorCode, HttpStatus.UNAUTHORIZED, params, details);
   }
 
   static Conflict(

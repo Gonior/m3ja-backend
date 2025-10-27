@@ -57,8 +57,8 @@ export class EnvService {
   }
   get secretConfig() {
     return {
-      jwtSecretKey: this.config.get('JWT_SECRET_KEY', { infer: true }),
-      salt: this.config.get('SALT', { infer: true }),
+      jwtAccessSecret: this.config.get('JWT_ACCESS_SECRET', { infer: true }),
+      jwtRefreshSecret: this.config.get('JWT_REFRESH_SECRET', { infer: true }),
     };
   }
 }

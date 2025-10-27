@@ -5,11 +5,19 @@ import { AllExceptionFilter } from './filters/all-exception.filter';
 import { LoggingInterceptor } from './inteceptors/logging.interceptor';
 import { ConfigModule } from './config/config.module';
 import { LoggerModule } from './logger/logger.module';
+import { RedisModule } from './redis/redis.module';
 
 @Global()
 @Module({
-  imports: [DbModule, ConfigModule, LoggerModule],
+  imports: [DbModule, ConfigModule, LoggerModule, RedisModule],
   providers: [AllExceptionFilter, LoggingInterceptor],
-  exports: [DbModule, AllExceptionFilter, LoggingInterceptor, ConfigModule, LoggerModule],
+  exports: [
+    DbModule,
+    AllExceptionFilter,
+    LoggingInterceptor,
+    ConfigModule,
+    LoggerModule,
+    RedisModule,
+  ],
 })
 export class CommonModule {}

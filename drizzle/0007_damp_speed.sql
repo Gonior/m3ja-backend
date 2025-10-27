@@ -1,0 +1,1 @@
+CREATE INDEX "jti_idx" ON "user_tokens" USING btree ("jti");

@@ -63,7 +63,18 @@ export class AllExceptionFilter implements ExceptionFilter {
               ? (formatErrors(res.message, lang) as any)
               : res.message,
         };
-      } else if (status === 413) {
+      }
+      // } else if (status === 401) {
+      //   body = {
+      //     success: false,
+      //     errorCode: 'UNAUTHORIZED',
+      //     statusCode: status,
+      //     message: translateValidationError('UNAUTHORIZED', lang),
+      //     details: res.message ?? null,
+      //   };
+
+      // }
+      else if (status === 413) {
         // get error from multer middleware
         const maxSize = request['multerMaxSize'] / 1024 / 1024;
         body = {

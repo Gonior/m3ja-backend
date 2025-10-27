@@ -11,3 +11,5 @@ export * from './pipes/base-validation.pipe';
 export * from './decorators/upload-type.decorator';
 export * from './decorators/json-body.decorator';
 export * from './middleware/request_context.middleware';
+export * from './redis/redis.service';
+export * from './db/db.service';

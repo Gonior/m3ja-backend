@@ -6,8 +6,8 @@ export interface IEnv {
   API_PORT: number;
   WORKER_PORT: number;
 
-  JWT_SECRET_KEY: string;
-  SALT: number;
+  JWT_ACCESS_SECRET: string;
+  JWT_REFRESH_SECRET: string;
 
   DB_URL: string;
   REDIS_URL: string;
