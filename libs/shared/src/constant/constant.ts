@@ -1,4 +1,8 @@
 export const WORKER_SERVICE = 'WORKER_SERVICE';
+export const COOKIE_KEY = {
+  REFRESH_TOKEN_KEY: 'refreshToken',
+  ACCESS_TOKEN_KEY: 'accessToken',
+} as const;
 
 export const EVENT = {
   WORKER_UPLOAD_AVATAR: 'user.created.avatar',
@@ -10,10 +14,10 @@ export const QUEUE = {
 };
 
 export const TTL = {
-  STR_ACCESS_TOKEN: '15m',
+  STR_ACCESS_TOKEN: '1h',
   STR_REFRESH_TOKEN: '30d',
-  SCD_ACCESS_TOKEN: 15 * 60,
-  MSSCD_ACCESS_TOKEN: 15 * 60 * 1000,
+  SCD_ACCESS_TOKEN: 60 * 60,
+  MSSCD_ACCESS_TOKEN: 60 * 60 * 1000,
   SCD_REFRESH_TOKEN: 7 * 24 * 60 * 60,
   MSSCD_REFRESH_TOKEN: 7 * 24 * 60 * 60 * 1000,
 } as const;

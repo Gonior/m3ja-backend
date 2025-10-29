@@ -9,8 +9,7 @@ export class RequestContextMiddleware implements NestMiddleware {
   constructor(private readonly cls: ClsService) {}
 
   use(req: any, res: any, next: () => void) {
-    this.cls.set('requestId', randomBytes(6).toString('hex'));
-    this.cls.set('userId', req.user?.id ?? null);
+    this.cls.set('requestId', randomBytes(4).toString('hex'));
     next();
   }
 }

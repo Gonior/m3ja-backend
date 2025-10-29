@@ -5,3 +5,4 @@ export * from './env.interface';
 export * from './file-service.interface';
 export * from './upload-event.interfaces';
 export * from './jwt-paylod.interface';
+export * from './api-response.interface';

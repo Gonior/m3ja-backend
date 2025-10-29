@@ -43,9 +43,8 @@ export class RegistrationService {
     }
     this.logger.log(`✅ User registered successfully (id: ${user.id})`, RegistrationService.name);
     return {
-      success: true,
-      message: 'user created!',
-      user,
+      message: 'User created!',
+      data: user,
     };
   }
 }

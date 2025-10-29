@@ -15,8 +15,16 @@ import { AuthDto } from './dto/auth.dto';
 import type { Request, Response } from 'express';
 import { JwtAuthGuard } from './auth.guard';
 import { ApiError } from '@app/common/errors';
-import { IJwtPayload } from '@app/shared';
-import { ApiConsumes, ApiCookieAuth, ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, COOKIE_KEY, IJwtPayload, TTL } from '@app/shared';
+import {
+  ApiConsumes,
+  ApiCookieAuth,
+  ApiHeader,
+  ApiHeaders,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GetUser } from '@app/common';
 
 @ApiTags('User autentikasi')
 @Controller('auth')
@@ -33,21 +41,22 @@ export class AuthController {
   @Post('login')
   async login(
     @Body() authDto: AuthDto,
-    @Res() res: Response,
     @Ip() ip?: string,
     @Headers('user-agent') userAgent?: string,
-  ) {
-    const { success, accessToken, refreshToken } = await this.authService.login(
-      authDto,
-      ip,
-      userAgent,
-    );
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60,
-      sameSite: 'lax', // aman buat FE di domain sama,
-    });
-    res.status(200).json({ success, accessToken });
+  ): Promise<ApiResponse> {
+    const { accessToken, refreshToken } = await this.authService.login(authDto, ip, userAgent);
+
+    return {
+      message: 'Login success',
+      data: { accessToken },
+      setCookies: [
+        {
+          name: COOKIE_KEY.REFRESH_TOKEN_KEY,
+          value: refreshToken,
+          options: { maxAge: TTL.MSSCD_REFRESH_TOKEN },
+        },
+      ],
+    };
   }
 
   @Post('refresh')
@@ -59,43 +68,43 @@ export class AuthController {
     required: false,
   })
   async refreshToken(
-    @Ip() ip: string,
-    @Headers('user-agent') userAgent: string,
     @Req() req: Request,
-    @Res() res: Response,
-  ) {
+    @Ip() ip?: string,
+    @Headers('user-agent') userAgent?: string,
+  ): Promise<ApiResponse> {
     const token = req.cookies['refreshToken'];
 
     if (!token) throw ApiError.Unathorized('UNAUTHORIZED', undefined, 'Refresh token is missing');
 
-    const { success, accessToken, refreshToken } = await this.authService.refreshToken(
-      token,
-      ip,
-      userAgent,
-    );
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60,
-      sameSite: 'lax', // aman buat FE di domain sama,
-    });
-    res.status(200).json({ success, accessToken });
+    const { accessToken, refreshToken } = await this.authService.refreshToken(token, ip, userAgent);
+
+    return {
+      data: {
+        accessToken,
+      },
+      setCookies: [
+        {
+          name: COOKIE_KEY.REFRESH_TOKEN_KEY,
+          value: refreshToken,
+          options: { maxAge: TTL.MSSCD_REFRESH_TOKEN },
+        },
+      ],
+    };
   }
 
   @ApiOperation({ summary: 'Hapus session user (cookie & token)' })
   @ApiCookieAuth('refreshToken')
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'JWT Access Token',
-    example: 'Bearer eyaTokenJwtYangPanjangItu',
-    required: true,
-  })
   @Post('logout')
-  async logout(@Req() req: Request, @Res() res: Response) {
+  async logout(@Req() req: Request): Promise<ApiResponse> {
     const refreshToken = req.cookies['refreshToken'];
 
     const isRevoked = await this.authService.logoutByRefreshToken(refreshToken);
-    res.clearCookie('refreshToken');
-    res.status(200).json({ success: true, isRevoked });
+    return {
+      clearCookies: [COOKIE_KEY.REFRESH_TOKEN_KEY],
+      data: {
+        isRevoked,
+      },
+    };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -104,8 +113,24 @@ export class AuthController {
     return req.user;
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Mengetahui jumlah token aktif dari seorang user dengan JWT.' })
+  @ApiHeader({
+    name: 'Autorization',
+    description: 'JWT Access Token',
+    example: 'Bearer yourLongToken',
+    required: true,
+  })
+  @Get('audit')
+  async findUserActiveToken(@GetUser('id') userId: number) {
+    if (!userId) throw ApiError.Unathorized();
+    else return await this.authService.findUserActiveToken(userId);
+  }
+
+  @ApiOperation({ summary: 'Mengetahui jumlah token aktif dari seorang user dengan params.' })
   @Get('audit/:id')
-  async findUserActiveToken(@Param('id') id: number) {
-    return await this.authService.findUserActiveToken(id);
+  async findUserActiveTokenByParam(@Param('id') userId: number) {
+    if (!userId) throw ApiError.Unathorized();
+    else return await this.authService.findUserActiveToken(userId);
   }
 }

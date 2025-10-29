@@ -40,9 +40,7 @@ export class RegistrationController {
   @UploadType({ type: 'avatar' })
   async register(
     @JsonBody('data') data: CreateUserDto,
-    @UploadedFile(
-      new FileValidationPipe({ ...UploadConfigs.avatar, optional: true }),
-    )
+    @UploadedFile(new FileValidationPipe({ ...UploadConfigs.avatar, optional: true }))
     file?: Express.Multer.File,
   ) {
     return await this.registrationService.register(data, file);

@@ -8,12 +8,17 @@ import { EnvService } from '@app/common/config/env.config.service';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { QUEUE } from '@app/shared';
 import cookieParser from 'cookie-parser';
+import { ResponseInterceptor } from '@app/common/inteceptors/response.interceptor';
+import { ClsUserInterceptor } from '@app/common/inteceptors/cls-user.interceptor';
+import { ClsService } from 'nestjs-cls';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true, // biar logger custom bisa dapat semua log
   });
-  // set env config
+
   const config = app.get(EnvService);
+  const logger = app.get(AppLogger);
+  const clsService = app.get(ClsService);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
@@ -33,21 +38,17 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('docs', app, document);
 
-  // biar file lokal bisa diakses lewat url
-  // app.useStaticAssets(join(process.cwd(), 'uploads'), {
-  //   prefix: '/file/',
-  // });
-
   app.use(cookieParser());
-  // set logger wiston
-  const logger = app.get(AppLogger);
   app.useLogger(logger);
   // picu onModuleDestroy()
   app.enableShutdownHooks();
+
   // global error handler
   app.useGlobalFilters(new AllExceptionFilter(logger));
 
   // global http logger
+  app.useGlobalInterceptors(new ResponseInterceptor(config));
+  app.useGlobalInterceptors(new ClsUserInterceptor(clsService));
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
 
   const host = config.appConfig.host || '127.0.0.1';
