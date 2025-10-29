@@ -3,17 +3,17 @@ import { CreateUserDto } from './dto/create-user-dto';
 import { AppLogger } from '@app/common';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { ApiError } from '@app/common/errors';
-import { UploadService } from '@app/upload';
 import { UserRepository } from './user.repository';
 import * as argon2 from 'argon2';
 import { type TUser } from '@app/shared';
+import { FileService } from '@app/file';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly logger: AppLogger,
-    private readonly uploadService: UploadService,
     private readonly userRepo: UserRepository,
+    private readonly fileService: FileService,
   ) {}
 
   async findAll() {
@@ -22,6 +22,10 @@ export class UserService {
 
   async findByEmail(email: string) {
     return this.userRepo.findByEmail(email);
+  }
+
+  async findById(id: number) {
+    return await this.userRepo.findById(id);
   }
 
   async registerUser(createUserDto: CreateUserDto) {
@@ -47,7 +51,7 @@ export class UserService {
     }
     if (deleted.avatarKey) {
       this.logger.debug(`🔧 AvatarKey detected...`, UserService.name);
-      await this.uploadService.deleteFile(deleted.avatarKey);
+      await this.fileService.deleteFile(deleted.avatarKey);
     }
 
     this.logger.debug(`✅ User deleted successfully user (id: ${id})`, UserService.name);

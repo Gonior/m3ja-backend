@@ -13,12 +13,22 @@ export class FileService implements IFileService {
     private readonly localFileService: LocalFileService,
     private readonly r2FileService: R2FileService,
   ) {}
+
+  async deleteFile(key: string): Promise<boolean> {
+    if (this.envService.isProduction) {
+      this.logger.warn('📁 Set delete file to R2 (cloud)', FileService.name);
+      return await this.r2FileService.deleteFile(key);
+    } else {
+      this.logger.warn('📁 Set delete file to Local', FileService.name);
+      return await this.localFileService.deleteFile(key);
+    }
+  }
   async getFile(key: string) {
     if (this.envService.isProduction) {
-      this.logger.warn('📁 Get file from R2', R2FileService.name);
+      this.logger.warn('📁 Get file from R2', FileService.name);
       return await this.r2FileService.getFile(key);
     } else {
-      this.logger.warn('📁 Get file set Local', R2FileService.name);
+      this.logger.warn('📁 Get file set Local', FileService.name);
       return await this.localFileService.getFile(key);
     }
   }

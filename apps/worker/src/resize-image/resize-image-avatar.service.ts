@@ -41,7 +41,7 @@ export class ResizeImageAvatarService {
       );
       if (newResponseUploadFile) {
         this.logger.debug('🔧 deleting old avatarKey', 'ResizeImage');
-        await this.uploadService.deleteFile(data.key);
+        await this.fileService.deleteFile(data.key);
       }
       this.logger.log('✅ Finish resize image', 'ResizeImage');
       const newUploadEvent: IUploadEvent = {

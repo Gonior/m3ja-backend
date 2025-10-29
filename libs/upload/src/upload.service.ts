@@ -23,14 +23,4 @@ export class UploadService implements IUploadService {
       return await this.localUpload.saveFile(file, folder);
     }
   }
-
-  async deleteFile(key: string): Promise<IDeletedFileResponse> {
-    if (this.envService.isProduction) {
-      this.logger.warn('📁 Set delete file to R2 (cloud)', UploadService.name);
-      return await this.r2UploadService.deleteFile(key);
-    } else {
-      this.logger.warn('📁 Set delete file to Local', UploadService.name);
-      return await this.localUpload.deleteFile(key);
-    }
-  }
 }

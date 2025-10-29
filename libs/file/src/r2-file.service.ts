@@ -1,7 +1,7 @@
 import { ApiError } from '@app/common/errors';
 import { Injectable } from '@nestjs/common';
 
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { AppLogger } from '@app/common';
 import { EnvService } from '@app/common/config/env.config.service';
 import { IFileService } from '@app/shared';
@@ -28,6 +28,22 @@ export class R2FileService implements IFileService {
       forcePathStyle: false,
     });
   }
+  async deleteFile(key: string): Promise<boolean> {
+    try {
+      this.logger.debug('🔧 Deleting file ...', R2FileService.name);
+      await this.r2.send(
+        new DeleteObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+        }),
+      );
+      return true;
+    } catch (error) {
+      this.logger.error(error, undefined, R2FileService.name);
+      return false;
+    }
+  }
+
   async getFile(key: string) {
     try {
       this.logger.debug('🔧 Getting file...', R2FileService.name);

@@ -13,5 +13,4 @@ export interface IDeletedFileResponse {
 }
 export interface IUploadService {
   saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse>;
-  deleteFile(key: string): Promise<IDeletedFileResponse>;
 }

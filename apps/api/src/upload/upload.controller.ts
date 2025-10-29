@@ -1,9 +1,10 @@
 import { Controller, Post, UploadedFile, UseGuards } from '@nestjs/common';
 import { AppLogger, FileValidationPipe, UploadConfigs, UploadType } from '@app/common';
-import { UploadService } from '@app/upload';
+import { UploadService } from './upload.service';
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { ApiBody, ApiConsumes, ApiHeader, ApiOperation } from '@nestjs/swagger';
 import { MAX_AVATAR_SIZE, MAX_FILE_SIZE } from '@app/shared';
+import { GetUser } from '@app/common';
 
 @Controller('upload')
 export class UploadController {
@@ -46,8 +47,9 @@ export class UploadController {
   async uploadAvatar(
     @UploadedFile(new FileValidationPipe({ ...UploadConfigs.avatar }))
     file: Express.Multer.File,
+    @GetUser('id') userId: number,
   ) {
-    if (file) return await this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
+    return await this.uploadService.uploadAvatar(userId, file);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -79,6 +81,6 @@ export class UploadController {
     @UploadedFile(new FileValidationPipe({ ...UploadConfigs.document }))
     file: Express.Multer.File,
   ) {
-    if (file) return await this.uploadService.saveFile(file, UploadConfigs.document.folder);
+    // if (file) return await this.uploadService.saveFile(file, UploadConfigs.document.folder);
   }
 }

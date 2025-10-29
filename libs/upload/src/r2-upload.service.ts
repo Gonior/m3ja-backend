@@ -1,11 +1,6 @@
-import {
-  generateFilename,
-  IDeletedFileResponse,
-  IUploadFileResponse,
-  IUploadService,
-} from '@app/shared';
+import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
 import { Injectable } from '@nestjs/common';
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { AppLogger } from '@app/common';
 import { ApiError } from '@app/common/errors';
 import { EnvService } from '@app/common/config/env.config.service';
@@ -62,25 +57,6 @@ export class R2UploadService implements IUploadService {
     } catch (error) {
       this.logger.error(error, R2UploadService.name);
       throw ApiError.Internal('DB_UPLOAD_ERROR');
-    }
-  }
-
-  async deleteFile(key: string): Promise<IDeletedFileResponse> {
-    try {
-      this.logger.debug('🔧 Deleting file ...', R2UploadService.name);
-      await this.r2.send(
-        new DeleteObjectCommand({
-          Bucket: this.bucket,
-          Key: key,
-        }),
-      );
-      return {
-        success: true,
-        message: 'File deleted!',
-      };
-    } catch (error) {
-      this.logger.error(error, undefined, R2UploadService.name);
-      throw ApiError.Internal('DB_DELETE_ERROR');
     }
   }
 }

@@ -1,34 +1,14 @@
 import { AppLogger } from '@app/common';
 import { ApiError } from '@app/common/errors';
-import {
-  generateFilename,
-  IDeletedFileResponse,
-  IUploadFileResponse,
-  IUploadService,
-} from '@app/shared';
-import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
+import { generateFilename, IUploadFileResponse, IUploadService } from '@app/shared';
 import { Injectable } from '@nestjs/common';
-import { EnvService } from '@app/common/config/env.config.service';
+
 import { promises as fs } from 'fs';
-import path, { join } from 'path';
+import { join } from 'path';
 
 @Injectable()
 export class LocalUploadService implements IUploadService {
   constructor(private readonly logger: AppLogger) {}
-
-  async deleteFile(key: string): Promise<IDeletedFileResponse> {
-    this.logger.debug(`🔧 Deleting file ... `, LocalUploadService.name);
-    const filePath = path.join(process.cwd(), 'uploads', key);
-    await fs.rm(filePath).catch((error) => {
-      this.logger.error(error);
-      throw ApiError.Internal();
-    });
-
-    return {
-      success: true,
-      message: 'File deleted!',
-    };
-  }
   async saveFile(file: Express.Multer.File, folder: string): Promise<IUploadFileResponse> {
     this.logger.debug(`🔧 Uploading file ...`, LocalUploadService.name);
     const uploadeDir = join(process.cwd(), 'uploads', folder);

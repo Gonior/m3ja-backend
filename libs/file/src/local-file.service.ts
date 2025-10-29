@@ -2,13 +2,22 @@ import { AppLogger } from '@app/common';
 import { ApiError } from '@app/common/errors';
 import { IFileService } from '@app/shared';
 import { Injectable } from '@nestjs/common';
-import { createReadStream, existsSync } from 'fs';
+import { createReadStream, existsSync, promises as fs } from 'fs';
 import { lookup } from 'mime-types';
-import { join } from 'path';
+import path, { join } from 'path';
 
 @Injectable()
 export class LocalFileService implements IFileService {
   constructor(private readonly logger: AppLogger) {}
+  async deleteFile(key: string): Promise<boolean> {
+    this.logger.debug(`🔧 Deleting file ... `, LocalFileService.name);
+    const filePath = path.join(process.cwd(), 'uploads', key);
+    await fs.rm(filePath).catch((error) => {
+      this.logger.error(error);
+    });
+
+    return true;
+  }
   async getFile(key: string) {
     this.logger.debug('🔧 Getting file...', LocalFileService.name);
     const filePath = join(process.cwd(), 'uploads', key);
