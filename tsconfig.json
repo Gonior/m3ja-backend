@@ -1,4 +1,5 @@
 {
+  "exclude": ["node_modules", "dist", "build"],
   "compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -21,31 +22,17 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/common": [
-        "libs/common/src"
-      ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ],
-      "@app/file": [
-        "libs/file/src"
-      ],
-      "@app/file/*": [
-        "libs/file/src/*"
-      ],
-      "@app/shared": [
-        "libs/shared/src"
-      ],
-      "@app/shared/*": [
-        "libs/shared/src/*"
-      ],
-      "@app/upload": [
-        "libs/upload/src"
-      ],
-      "@app/upload/*": [
-        "libs/upload/src/*"
-      ]
+      "@app/common": ["libs/common/src"],
+      "@app/common/*": ["libs/common/src/*"],
+      "@app/file": ["libs/file/src"],
+      "@app/file/*": ["libs/file/src/*"],
+      "@app/shared": ["libs/shared/src"],
+      "@app/shared/*": ["libs/shared/src/*"],
+      "@app/upload": ["libs/upload/src"],
+      "@app/upload/*": ["libs/upload/src/*"]
     },
+    "checkJs": false,
+    "allowJs": true,
     "baseUrl": "./"
   }
 }

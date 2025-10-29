@@ -28,7 +28,7 @@ export class UserTokenRepository {
             gt(userTokensTable.expiresAt, now),
           ),
         );
-    });
+    }, 'UserTokenRepository.findUserJtiActiveToken');
   }
 
   async findOneJtiActiveToken(jti: UUID) {
@@ -45,7 +45,7 @@ export class UserTokenRepository {
           ),
         );
       return token;
-    });
+    }, 'UserTokenRepository.findOneJtiActiveToken');
   }
 
   async saveToken(newToken: TNewUserToken) {
@@ -70,6 +70,6 @@ export class UserTokenRepository {
         .where(eq(userTokensTable.jti, jti))
         .returning();
       return token;
-    }, 'UserRepository.findAll');
+    }, 'UserRepository.revokeToken');
   }
 }

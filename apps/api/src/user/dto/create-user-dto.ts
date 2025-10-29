@@ -5,12 +5,28 @@ import {
   MIN_LENGTH_PASSWORD,
 } from '@app/shared';
 import { TUser } from '@app/shared';
-import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 export class CreateUserDto
-  implements Omit<TUser, 'id' | 'createdAt' | 'updatedAt' | 'avatarResizeStatus'>
+  implements
+    Omit<TUser, 'id' | 'createdAt' | 'updatedAt' | 'avatarResizeStatus'>
 {
-  @MinLength(MIN_LENGTH_DISPLAY_NAME, { context: { min: MIN_LENGTH_DISPLAY_NAME } })
-  @MaxLength(MAX_LENGTH_DISPLAY_NAME, { context: { max: MAX_LENGTH_DISPLAY_NAME } })
+  @ApiProperty({
+    example: 'nom.rekayasa@example.com',
+    description: 'Alamat email pengguna',
+  })
+  @MinLength(MIN_LENGTH_DISPLAY_NAME, {
+    context: { min: MIN_LENGTH_DISPLAY_NAME },
+  })
+  @MaxLength(MAX_LENGTH_DISPLAY_NAME, {
+    context: { max: MAX_LENGTH_DISPLAY_NAME },
+  })
   @IsNotEmpty()
   displayName: string;
 

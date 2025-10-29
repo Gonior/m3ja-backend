@@ -16,6 +16,7 @@ import { UploadModule as UploadModuleCore } from '@app/upload';
 import { RequestContextMiddleware } from '@app/common';
 import { ClsModule } from 'nestjs-cls';
 import { HealthController } from './health/health.controller';
+import { WorkspaceModule } from './workspace/workspace.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { HealthController } from './health/health.controller';
       global: true,
       middleware: { mount: true },
     }),
+    WorkspaceModule,
   ],
   controllers: [AppController, HealthController],
   providers: [

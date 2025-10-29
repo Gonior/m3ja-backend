@@ -20,10 +20,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: IJwtPayload) {
     const isReady = this.redisService.getClient().isReady ?? false;
     if (isReady) {
-      const exists = await this.redisService.get(`access:${payload.jti}`);
+      const exists = await this.redisService.get(`session:${payload.sessionId}:access`);
       if (!exists) throw ApiError.Unathorized('UNAUTHORIZED', undefined, 'Token revoked');
     }
 
-    return { sub: payload.sub, email: payload.email, jti: payload.jti };
+    return {
+      id: payload.sub,
+      email: payload.email,
+      jti: payload.jti,
+      sessionId: payload.sessionId,
+    };
   }
 }

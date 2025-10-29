@@ -16,16 +16,26 @@ import type { Request, Response } from 'express';
 import { JwtAuthGuard } from './auth.guard';
 import { ApiError } from '@app/common/errors';
 import { IJwtPayload } from '@app/shared';
+import { ApiConsumes, ApiCookieAuth, ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('User autentikasi')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiConsumes('application/json')
+  @ApiOperation({ summary: 'Auntentikasi untuk mendapatkan access token' })
+  @ApiHeader({
+    name: 'user-agent',
+    description: 'informasi user agent client',
+    required: false,
+  })
   @Post('login')
   async login(
     @Body() authDto: AuthDto,
-    @Ip() ip: string,
-    @Headers('user-agent') userAgent: string,
     @Res() res: Response,
+    @Ip() ip?: string,
+    @Headers('user-agent') userAgent?: string,
   ) {
     const { success, accessToken, refreshToken } = await this.authService.login(
       authDto,
@@ -41,6 +51,13 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @ApiOperation({ summary: 'Refresh access token menggunakan cookie' })
+  @ApiCookieAuth('refreshToken')
+  @ApiHeader({
+    name: 'user-agent',
+    description: 'informasi user agent client',
+    required: false,
+  })
   async refreshToken(
     @Ip() ip: string,
     @Headers('user-agent') userAgent: string,
@@ -63,12 +80,20 @@ export class AuthController {
     });
     res.status(200).json({ success, accessToken });
   }
-  @UseGuards(JwtAuthGuard)
+
+  @ApiOperation({ summary: 'Hapus session user (cookie & token)' })
+  @ApiCookieAuth('refreshToken')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'JWT Access Token',
+    example: 'Bearer eyaTokenJwtYangPanjangItu',
+    required: true,
+  })
   @Post('logout')
   async logout(@Req() req: Request, @Res() res: Response) {
-    const token = req.cookies['refreshToken'];
-    const payload = req?.user as IJwtPayload;
-    const isRevoked = await this.authService.logout(token, payload.jti);
+    const refreshToken = req.cookies['refreshToken'];
+
+    const isRevoked = await this.authService.logoutByRefreshToken(refreshToken);
     res.clearCookie('refreshToken');
     res.status(200).json({ success: true, isRevoked });
   }

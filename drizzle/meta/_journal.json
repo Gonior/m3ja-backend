@@ -57,6 +57,34 @@
       "when": 1761487007400,
       "tag": "0007_damp_speed",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1761720378475,
+      "tag": "0008_pretty_lady_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1761729553874,
+      "tag": "0009_cute_songbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1761729644929,
+      "tag": "0010_jazzy_songbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1761729823049,
+      "tag": "0011_productive_exiles",
+      "breakpoints": true
     }
   ]
 }
