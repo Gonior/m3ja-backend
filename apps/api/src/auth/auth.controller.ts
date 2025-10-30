@@ -96,7 +96,7 @@ export class AuthController {
   @ApiCookieAuth('refreshToken')
   @Post('logout')
   async logout(@Req() req: Request): Promise<ApiResponse> {
-    const refreshToken = req.cookies['refreshToken'];
+    const refreshToken = req.cookies[COOKIE_KEY.REFRESH_TOKEN_KEY];
 
     const isRevoked = await this.authService.logoutByRefreshToken(refreshToken);
     return {
@@ -105,12 +105,6 @@ export class AuthController {
         isRevoked,
       },
     };
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  getProfile(@Req() req: any) {
-    return req.user;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -132,5 +126,11 @@ export class AuthController {
   async findUserActiveTokenByParam(@Param('id') userId: number) {
     if (!userId) throw ApiError.Unathorized();
     else return await this.authService.findUserActiveToken(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getProfile(@Req() req: any) {
+    return req.user;
   }
 }

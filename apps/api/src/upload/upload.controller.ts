@@ -81,6 +81,6 @@ export class UploadController {
     @UploadedFile(new FileValidationPipe({ ...UploadConfigs.document }))
     file: Express.Multer.File,
   ) {
-    // if (file) return await this.uploadService.saveFile(file, UploadConfigs.document.folder);
+    if (file) return await this.uploadService.uploadFile(file, UploadConfigs.document.folder);
   }
 }

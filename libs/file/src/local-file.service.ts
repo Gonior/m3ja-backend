@@ -12,12 +12,15 @@ export class LocalFileService implements IFileService {
   async deleteFile(key: string): Promise<boolean> {
     this.logger.debug(`🔧 Deleting file ... `, LocalFileService.name);
     const filePath = path.join(process.cwd(), 'uploads', key);
-    await fs.rm(filePath).catch((error) => {
+    try {
+      await fs.rm(filePath);
+      return true;
+    } catch (error) {
       this.logger.error(error);
-    });
-
-    return true;
+      return false;
+    }
   }
+
   async getFile(key: string) {
     this.logger.debug('🔧 Getting file...', LocalFileService.name);
     const filePath = join(process.cwd(), 'uploads', key);

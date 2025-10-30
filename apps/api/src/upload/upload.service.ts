@@ -37,4 +37,8 @@ export class UploadService {
 
     return responseUpload;
   }
+
+  async uploadFile(file: Express.Multer.File, folder: string) {
+    return await this.uploadService.saveFile(file, folder);
+  }
 }
