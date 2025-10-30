@@ -2,8 +2,8 @@ import { userTable } from '@app/common';
 import { DbService } from '@app/common/db/db.service';
 import { Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { CreateUserDto } from './dto/create-user-dto';
-import { UpdateUserDto } from './dto/update-user-dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UploadService } from '@app/upload';
 import { TUser } from '@app/shared';
 

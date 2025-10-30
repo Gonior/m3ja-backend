@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UploadedFile } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
-import { CreateUserDto } from '../user/dto/create-user-dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { FileValidationPipe, JsonBody, UploadType } from '@app/common';
 import { UploadConfigs } from '@app/common';
 import { EventPattern, Payload } from '@nestjs/microservices';

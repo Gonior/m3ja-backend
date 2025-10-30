@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { CreateUserDto } from '../user/dto/create-user-dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { ApiError } from '@app/common/errors';
 import * as argon2 from 'argon2';
 import { AppLogger, UploadConfigs } from '@app/common';

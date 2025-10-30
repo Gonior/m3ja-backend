@@ -5,7 +5,7 @@ import {
   MIN_LENGTH_PASSWORD,
 } from '@app/shared';
 
-import { CreateUserDto } from './create-user-dto';
+import { CreateUserDto } from './create-user.dto';
 import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 export class UpdateUserDto implements Partial<CreateUserDto> {
   @IsOptional()

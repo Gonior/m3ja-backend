@@ -27,6 +27,7 @@ export const MIN_LENGTH_DISPLAY_NAME = 1;
 
 export const MAX_LENGTH_DISPLAY_NAME = 100;
 export const MAX_LENGTH_EMAIL = 100;
+export const MAX_LENGTH_WORKSPACE_NAME = 100;
 export const MAX_AVATAR_SIZE = 3 * 1024 * 1024; // 3MB
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
 

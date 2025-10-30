@@ -6,3 +6,7 @@ export * from './file-service.interface';
 export * from './upload-event.interfaces';
 export * from './jwt-paylod.interface';
 export * from './api-response.interface';
+export * from './base-repo.interface';
+export * from './base-owned-repo.interfac';
+export * from './base-member-repo.interface';
+export * from './member-repo.interface';

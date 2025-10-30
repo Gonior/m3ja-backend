@@ -1,34 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { WorkspaceService } from './workspace.service';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
+import { GetUser } from '@app/common';
+import { JwtAuthGuard } from '../auth/auth.guard';
+import { ApiResponse } from '@app/shared';
 
+@UseGuards(JwtAuthGuard)
 @Controller('workspace')
 export class WorkspaceController {
   constructor(private readonly workspaceService: WorkspaceService) {}
 
   @Post()
-  create(@Body() createWorkspaceDto: CreateWorkspaceDto) {
-    return this.workspaceService.create(createWorkspaceDto);
+  create(@GetUser('id') userId: number, @Body() createWorkspaceDto: CreateWorkspaceDto) {
+    return this.workspaceService.create(userId, createWorkspaceDto);
   }
 
   @Get()
-  findAll() {
-    return this.workspaceService.findAll();
+  findAll(@GetUser('id') userId: number) {
+    return this.workspaceService.getAll(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.workspaceService.findOne(+id);
+  @Get('id/:id')
+  findOne(@Param('id') id: string, @GetUser('id') userId: number) {
+    return this.workspaceService.getOne(+id, userId);
+  }
+
+  @Get('slug/:slug')
+  async findBySlug(@GetUser('id') userId: number, @Param('slug') slug: string) {
+    console.log({ userId, slug });
+    return await this.workspaceService.findOneByOwnerIdAndSlug(+userId, slug);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorkspaceDto: UpdateWorkspaceDto) {
-    return this.workspaceService.update(+id, updateWorkspaceDto);
+  update(
+    @GetUser('id') userId: number,
+    @Param('id') id: string,
+    @Body() updateWorkspaceDto: UpdateWorkspaceDto,
+  ) {
+    return this.workspaceService.update(+id, updateWorkspaceDto, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.workspaceService.remove(+id);
+  async remove(@Param('id') id: string, @GetUser('id') userId: number): Promise<ApiResponse> {
+    let isDeleted = false;
+    isDeleted = await this.workspaceService.delete(+id, userId);
+    return { message: isDeleted ? 'Deleted workspace succesfully' : 'nothin to delete' };
   }
 }
