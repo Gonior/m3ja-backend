@@ -1,2 +1,0 @@
-CREATE TYPE "public"."avatarResizeStatusEnum" AS ENUM('none', 'processing', 'done', 'failed');--> statement-breakpoint
-ALTER TABLE "users" ADD COLUMN "avatar_resize_status" "avatarResizeStatusEnum" DEFAULT 'none';

@@ -16,18 +16,15 @@ export const avatarResizeStatusEnum = pgEnum('avatarResizeStatusEnum', [
 // done : avatar sudah di-resize
 // fail : avatar gagal di resize
 
-const userTable = pgTable(
-  'users',
-  {
-    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-    displayName: varchar('display_name', { length: 100 }).notNull(),
-    email: varchar('email', { length: 255 }).notNull().unique(),
-    password: text('password').notNull(),
-    avatarKey: text('avatar_key'),
-    avatarResizeStatus: avatarResizeStatusEnum('avatar_resize_status').default('none'),
-    ...timestamps,
-  },
-  (table) => [index('email_idx').on(table.email)],
-);
+const userTable = pgTable('users', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  displayName: varchar('display_name', { length: 100 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  username: varchar('username', { length: 100 }).notNull().notNull().unique(),
+  password: text('password').notNull(),
+  avatarKey: text('avatar_key'),
+  avatarResizeStatus: avatarResizeStatusEnum('avatar_resize_status').default('none'),
+  ...timestamps,
+});
 
 export default userTable;

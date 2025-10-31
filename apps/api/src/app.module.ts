@@ -17,6 +17,7 @@ import { RequestContextMiddleware } from '@app/common';
 import { ClsModule } from 'nestjs-cls';
 import { HealthController } from './health/health.controller';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { WorkspaceMemberModule } from './workspace-member/workspace-member.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
       middleware: { mount: true },
     }),
     WorkspaceModule,
+    WorkspaceMemberModule,
   ],
   controllers: [AppController, HealthController],
   providers: [

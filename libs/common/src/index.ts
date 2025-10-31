@@ -12,3 +12,4 @@ export * from './decorators';
 export * from './middleware/request_context.middleware';
 export * from './redis/redis.service';
 export * from './db/db.service';
+export * from './base-service';

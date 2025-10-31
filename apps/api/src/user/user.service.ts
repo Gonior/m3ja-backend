@@ -33,6 +33,10 @@ export class UserService {
     const existsUser = await this.userRepo.findByEmail(createUserDto.email);
     if (existsUser) throw ApiError.Conflict('ALREADY_EXISTS', { field: 'Email' });
 
+    this.logger.debug('🔧 Checking username...', UserService.name);
+    const existsUsername = await this.userRepo.findByUsername(createUserDto.username);
+    if (existsUsername) throw ApiError.Conflict('ALREADY_EXISTS', { field: 'Username' });
+
     this.logger.debug('🔧 Hashing password...', UserService.name);
     const hashedPassword = await argon2.hash(createUserDto.password);
     createUserDto.password = hashedPassword;

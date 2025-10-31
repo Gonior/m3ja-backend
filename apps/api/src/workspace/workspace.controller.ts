@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/auth.guard';
 import { ApiResponse } from '@app/shared';
 
 @UseGuards(JwtAuthGuard)
-@Controller('workspace')
+@Controller('w')
 export class WorkspaceController {
   constructor(private readonly workspaceService: WorkspaceService) {}
 

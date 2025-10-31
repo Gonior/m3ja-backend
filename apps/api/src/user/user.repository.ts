@@ -22,9 +22,17 @@ export class UserRepository {
       return user;
     }, 'UserRepository.findByEmail');
   }
+
+  async findByUsername(username: string) {
+    return await this.orm.safeExcute(async (db) => {
+      const [user] = await db.select().from(userTable).where(eq(userTable.username, username));
+      return user;
+    }, 'UserRepository.findByUsername');
+  }
+
   async findById(id: number) {
     return await this.orm.safeExcute(async (db) => {
-      const [user] = await db.select().from(userTable).where(eq(userTable.id, id));
+      const [user] = await db.select().from(userTable).where(eq(userTable.id, id)).limit(1);
       return user;
     }, 'UserRepository.findById');
   }

@@ -1,4 +1,5 @@
-import { IBaseMemberRepo, IBaseOwnedRepo, IMemberRepo, MemberRole } from '@app/shared';
+import { IBaseMemberRepo, IBaseOwnedRepo, IMemberRepo } from '@app/shared';
+import { WorkspaceRole } from '../db/schema/workspace-members.schema';
 import { ApiError } from '../errors';
 
 export abstract class BaseMemberService<T extends { id: number; workspaceId: number }> {
@@ -8,11 +9,11 @@ export abstract class BaseMemberService<T extends { id: number; workspaceId: num
   ) {}
 
   protected async ensureMember(
-    userId: number,
+    actorId: number,
     workspaceId: number,
-    allowedRoles: MemberRole[] = ['owner', 'admin', 'member'],
+    allowedRoles: WorkspaceRole[] = ['owner', 'admin', 'member'],
   ) {
-    const member = await this.memberRepo.findOneMember(userId, workspaceId);
+    const member = await this.memberRepo.findOneMember(actorId, workspaceId);
 
     if (!member) throw ApiError.Forbidden();
 
@@ -21,33 +22,49 @@ export abstract class BaseMemberService<T extends { id: number; workspaceId: num
     return member;
   }
 
-  async getAll(workspaceId: number, userId: number) {
-    await this.ensureMember(userId, workspaceId);
+  async getAll(workspaceId: number, actorId: number) {
+    await this.ensureMember(actorId, workspaceId);
     return this.repo.findAllByWorkspace(workspaceId);
   }
-  async getOne(id: number, userId: number) {
+  async getOne(id: number, actorId: number, errorProp: string) {
     const resource = await this.repo.findOneById(id);
-    if (!resource) throw ApiError.NotFound('NOT_FOUND', { prop: 'Workspace' });
-    await this.ensureMember(resource.workspaceId, userId);
+    if (!resource) throw ApiError.NotFound('NOT_FOUND', { prop: errorProp });
+    await this.ensureMember(resource.workspaceId, actorId);
     return resource;
   }
 
-  async create(dto: Partial<T>, userId: number, workspaceId: number) {
-    await this.ensureMember(userId, workspaceId, ['admin', 'owner', 'member']);
+  async create(
+    dto: Partial<T>,
+    actorId: number,
+    workspaceId: number,
+    allowedRoles: WorkspaceRole[] = ['owner'],
+  ) {
+    await this.ensureMember(actorId, workspaceId, allowedRoles);
     return this.repo.create({ ...dto, workspaceId });
   }
 
-  async update(id: number, dto: Partial<T>, userId: number) {
+  async update(
+    id: number,
+    dto: Partial<T>,
+    actorId: number,
+    allowedRoles: WorkspaceRole[] = ['owner'],
+    errorProp: string,
+  ) {
     const resource = await this.repo.findOneById(id);
-    if (!resource) throw ApiError.NotFound('NOT_FOUND', { prop: 'Workspace' });
-    await this.ensureMember(userId, resource.workspaceId, ['owner', 'admin']);
+    if (!resource) throw ApiError.NotFound('NOT_FOUND', { prop: errorProp });
+    await this.ensureMember(actorId, resource.workspaceId, allowedRoles);
     return this.repo.update(id, dto);
   }
 
-  async delete(id: number, userId: number) {
+  async delete(
+    id: number,
+    actorId: number,
+    allowedRoles: WorkspaceRole[] = ['owner'],
+    errorProp: string,
+  ) {
     const resource = await this.repo.findOneById(id);
-    if (!resource) throw ApiError.NotFound('NOT_FOUND', { prop: 'Workspace' });
-    await this.ensureMember(userId, resource.workspaceId, ['owner', 'admin']);
+    if (!resource) throw ApiError.NotFound('NOT_FOUND', { prop: errorProp });
+    await this.ensureMember(actorId, resource.workspaceId, allowedRoles);
     return this.repo.delete(id);
   }
 }

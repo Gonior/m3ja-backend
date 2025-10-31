@@ -13,8 +13,6 @@
     "devlog": "node scripts/create-devlog.js",
     "start": "nest start",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
-    "start:dev api": "cross-env NODE_ENV=development nest start api --watch",
-    "start:dev worker": "cross-env NODE_ENV=development nest start worker --watch",
     "start:debug": "nest start --debug --watch",
     "start:debug worker": "nest start worker --debug --watch",
     "start:prod": "cross-env NODE_ENV=production node dist/apps/api/main",

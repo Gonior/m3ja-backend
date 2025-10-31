@@ -23,11 +23,12 @@ export const TTL = {
 } as const;
 
 export const MIN_LENGTH_PASSWORD = 8;
-export const MIN_LENGTH_DISPLAY_NAME = 1;
-
-export const MAX_LENGTH_DISPLAY_NAME = 100;
-export const MAX_LENGTH_EMAIL = 100;
+export const MIN_LENGTH_DISPLAY_NAME = 3;
+export const MIN_LENGTH_USERNAME = 3;
+export const MAX_LENGTH_DISPLAY_NAME = 30;
+export const MAX_LENGTH_EMAIL = 50;
 export const MAX_LENGTH_WORKSPACE_NAME = 100;
+export const MAX_LENGTH_USERNAME = 30;
 export const MAX_AVATAR_SIZE = 3 * 1024 * 1024; // 3MB
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
 

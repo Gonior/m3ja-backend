@@ -1,8 +1,10 @@
 import {
   MAX_LENGTH_DISPLAY_NAME,
   MAX_LENGTH_EMAIL,
+  MAX_LENGTH_USERNAME,
   MIN_LENGTH_DISPLAY_NAME,
   MIN_LENGTH_PASSWORD,
+  MIN_LENGTH_USERNAME,
 } from '@app/shared';
 
 import { CreateUserDto } from './create-user.dto';
@@ -19,6 +21,13 @@ export class UpdateUserDto implements Partial<CreateUserDto> {
   @MaxLength(MAX_LENGTH_EMAIL, { context: { max: MAX_LENGTH_EMAIL } })
   @IsNotEmpty()
   email?: string;
+
+  @IsOptional()
+  @IsEmail()
+  @MaxLength(MAX_LENGTH_USERNAME, { context: { max: MAX_LENGTH_USERNAME } })
+  @MinLength(MIN_LENGTH_USERNAME, { context: { min: MIN_LENGTH_USERNAME } })
+  @IsNotEmpty()
+  username?: string;
 
   @IsOptional()
   @IsNotEmpty()

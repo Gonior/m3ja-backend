@@ -45,7 +45,7 @@ function colorizeLevel(level: string) {
 
                 let ctx = '';
                 let rid = requestId ? chalk.cyan(`[reqId:${requestId}]`) : '';
-                let uid = userId ? chalk.cyanBright(`[userId:${userId}]`) : '';
+                let uid = userId ? chalk.yellowBright(`[userId:${userId}]`) : '';
 
                 if (context && typeof context === 'object' && 'context' in context) {
                   ctx = context.context

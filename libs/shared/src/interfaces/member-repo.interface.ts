@@ -1,12 +1,6 @@
-export type MemberRole = 'owner' | 'admin' | 'member' | 'viewer';
-
-export interface MemberEntity {
-  userId: number;
-  worspaceId: number;
-  role: MemberRole;
-  joinAt: Date;
-}
+import { TMember } from '../entities';
 
 export interface IMemberRepo {
-  findOneMember(userId: number, workspaceId: number): Promise<MemberEntity | null>;
+  // update(userId: number, workspaceId: number, data: Partial<TMember>): Promise<TMember>;
+  findOneMember(userId: number, workspaceId: number): Promise<TMember | null>;
 }

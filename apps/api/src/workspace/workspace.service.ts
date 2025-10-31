@@ -2,16 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
 import { WorkspaceRepository } from './workspace.repository';
-import { AppLogger, workspaceTable } from '@app/common';
+import { AppLogger, BaseOwnedService } from '@app/common';
 import { ApiError } from '@app/common/errors';
 import { generateSlug, TWorkspace } from '@app/shared';
-import { BaseOwnedService } from '@app/common/base-service/base-owned.service';
+import { WorkspaceMemberService } from '../workspace-member/workspace-member.service';
 
 @Injectable()
 export class WorkspaceService extends BaseOwnedService<TWorkspace> {
   constructor(
     private readonly workspaceRepo: WorkspaceRepository,
     private readonly logger: AppLogger,
+    private readonly memberRepo: WorkspaceMemberService,
   ) {
     super(workspaceRepo);
   }
@@ -25,7 +26,9 @@ export class WorkspaceService extends BaseOwnedService<TWorkspace> {
     while (await this.workspaceRepo.existsBySlug(userId, slug)) {
       slug = `${baseSlug}-${i++}`;
     }
-    return await super.create(userId, { ...createWorkspaceDto, slug });
+    const workspace = await super.create(userId, { ...createWorkspaceDto, slug });
+    await this.memberRepo.setOwner(userId, workspace.id);
+    return workspace;
   }
 
   async findOneByOwnerIdAndSlug(userId: number, slug: string) {

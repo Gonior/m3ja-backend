@@ -1,46 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { ApiError } from '@app/common/errors';
-import * as argon2 from 'argon2';
-import { AppLogger, UploadConfigs } from '@app/common';
-import { IUploadFileResponse, WORKER_SERVICE, EVENT, IUploadEvent } from '@app/shared';
-import { ClientProxy } from '@nestjs/microservices';
-import { UploadService } from '@app/upload';
+import { AppLogger } from '@app/common';
+
 @Injectable()
 export class RegistrationService {
   constructor(
     private readonly userService: UserService,
-    private readonly uploadService: UploadService,
     private readonly logger: AppLogger,
-    @Inject(WORKER_SERVICE) private readonly uploadClient: ClientProxy,
   ) {}
 
-  async register(createUserDto: CreateUserDto, file?: Express.Multer.File) {
+  async register(createUserDto: CreateUserDto) {
     this.logger.debug(`➡️ Start register user...`, RegistrationService.name);
-    let responseFile: IUploadFileResponse;
 
     let user = await this.userService.registerUser(createUserDto);
     if (!user) throw ApiError.BadRequest('REGISTER_ACCOUNT_ERROR');
 
-    if (file) {
-      this.logger.debug(`🔧 Avatar detected...`, RegistrationService.name);
-      responseFile = await this.uploadService.saveFile(file, UploadConfigs.avatar.folder);
-      if (responseFile) {
-        const uploadEvent: IUploadEvent = {
-          ...responseFile,
-          userId: user.id,
-          avatarResizeStatus: 'processing',
-        };
-        await this.userService.updateAvatar(uploadEvent.userId, {
-          avatarKey: uploadEvent.key,
-          avatarResizeStatus: uploadEvent.avatarResizeStatus,
-        });
-
-        this.logger.debug(`🔧 Sending to worker (id :${user.id})`, RegistrationService.name);
-        this.uploadClient.emit(EVENT.WORKER_UPLOAD_AVATAR, uploadEvent);
-      }
-    }
     this.logger.log(`✅ User registered successfully (id: ${user.id})`, RegistrationService.name);
     return {
       message: 'User created!',

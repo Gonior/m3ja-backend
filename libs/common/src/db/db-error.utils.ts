@@ -23,7 +23,5 @@ export function mapPosgresError(error: any): never {
         throw ApiError.BadRequest('DB_INVALID_INPUT');
     }
   }
-  console.log(error);
-
   throw ApiError.Internal('DB_UNKNOW_ERROR', undefined, error.message);
 }

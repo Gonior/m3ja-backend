@@ -111,4 +111,8 @@ export const ERROR_MESSAGES: Record<ErrorCode, Record<Lang, string>> = {
     en: 'Error while saving token',
     id: 'Error ketika menyimpan token',
   },
+  MATCHES: {
+    en: 'Username should only contain letters, numbers, underscore (_), and period (.)',
+    id: 'Username hanya boleh berisi huruf, angka, simbol underscore (_) dan titik (.)',
+  },
 } as const;
